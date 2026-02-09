@@ -69,7 +69,7 @@ export default function Home() {
         ) : (
           <>
             {/* Navigation */}
-            <nav className="w-full p-6 flex justify-between items-center max-w-7xl mx-auto relative z-10">
+            {/* <nav className="w-full p-6 flex justify-between items-center max-w-7xl mx-auto relative z-10">
               <motion.div
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -80,7 +80,7 @@ export default function Home() {
                 </div>
                 VIBE
               </motion.div>
-            </nav>
+            </nav> */}
 
             {/* Hero Content */}
             <main className="flex-1 flex items-center justify-center px-4 text-center relative z-10">
