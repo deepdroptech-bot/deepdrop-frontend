@@ -33,8 +33,7 @@ export default function Login({ branchName }) {
 
 useEffect(() => {
   if (user) {
-    if (user.role === "admin") navigate("/admin");
-    if (user.role === "manager") navigate("/manager");
+    navigate("/dashboard")
   }
 }, [user, navigate]);
 
