@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://deepdrop-backend.onrender.com", // backend url
+ baseURL: "https://deepdrop-backend.onrender.com/api", // backend url
 });
 
 // attach token automatically

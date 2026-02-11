@@ -21,7 +21,10 @@ export default function Login({ branchName }) {
  const handleLogin = async e => {
     e.preventDefault()
     try {
-    await login(email, password)
+    await login(
+      email,
+      password
+    )
   }
     catch (err) {
         alert("Login failed: " + (err.response?.data?.msg || err.message))
@@ -73,7 +76,7 @@ useEffect(() => {
               transition={{ delay: 0.3 }}
               className="mt-6 text-2xl font-black text-white"
             >
-              {branchName || "Welcome"}
+              {branchName || "Input Login..."}
             </motion.h2>
           </motion.div>
         ) : (
