@@ -41,7 +41,7 @@ export default function Home() {
           className="w-full h-full object-cover"
         >
           <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-statues-32634-large.mp4"
+            src="https://youtube.com/shorts/_QiVoaqI4Lk?si=7H9FP9t_8atPV-Ii"
             type="video/mp4"
           />
         </video>
