@@ -4,6 +4,7 @@ import GetStarted from "./pages/GetStarted";
 import Login from "./pages/Login"
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProtectedRoute from "./components/ProtectedRoute";
+import StaffProfile from "./pages/dashboard/staff/StaffProfile";
 // import { useEffect, useState } from "react";
 
 // import { useState, useEffect } from "react";
@@ -39,9 +40,9 @@ function App() {
         <Route
   path="/dashboard"
   element={
-    // <ProtectedRoute>
+     <ProtectedRoute>
       <DashboardHome />
-    // {/* </ProtectedRoute> */}
+     </ProtectedRoute>
   }
 />
 <Route
@@ -49,6 +50,15 @@ function App() {
   element={
     <ProtectedRoute>
       <ProfilePage />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/dashboard/staff/:id"
+  element={
+    <ProtectedRoute>
+      <StaffProfile />
     </ProtectedRoute>
   }
 />
