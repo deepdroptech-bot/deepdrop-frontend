@@ -12,7 +12,7 @@ export const staffAPI = {
      formData.append("lastName", data.lastName);
      formData.append("phone", data.phone);
      formData.append("position", data.position);
-     formData.append("baseSalary", data.baseSalary);
+     formData.append("baseSalary", Number(data.baseSalary));
      formData.append("nin", data.nin);
      if (data.photo) {
        formData.append("photo", data.photo);
@@ -28,7 +28,10 @@ export const staffAPI = {
      if (data.position) formData.append("position", data.position);
      if (data.baseSalary) formData.append("baseSalary", data.baseSalary);
      if (data.nin) formData.append("nin", data.nin);
-     if (data.employmentStatus) formData.append("employmentStatus", data.employmentStatus);
+
+     if (data.baseSalary !== undefined && data.baseSalary !== "") {
+  formData.append("baseSalary", Number(data.baseSalary));
+}
       if (data.photo) formData.append("photo", data.photo);
     return axios.put(`/staff/${id}`, formData);
   },
