@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { staffAPI } from "../../services/staffService";
+import { staffAPI } from "../../../services/staffService";
 
 export default function EditStaff() {
   const { id } = useParams();

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { staffAPI } from "../../services/staffService";
+import { staffAPI } from "../../../services/staffService";
 import { useAuth } from "../../context/AuthContext";
 
 export default function StaffAdjustments({ staff }) {

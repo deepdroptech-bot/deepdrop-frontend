@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import UserTable from "./UserTable";
 import CreateUserModal from "./CreateUserModal";
-import api from "../../utils/api";
+import api from "../../../services/api";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);

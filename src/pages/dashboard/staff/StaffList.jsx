@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { staffAPI } from "../../services/staffService";
+import { staffAPI } from "../../../services/staffService";
 import { Link } from "react-router-dom";
 
 export default function StaffList() {

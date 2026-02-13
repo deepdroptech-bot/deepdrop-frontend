@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { staffAPI } from "../../services/staffService";
+import { staffAPI } from "../../../services/staffService";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateStaff() {
