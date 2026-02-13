@@ -46,7 +46,7 @@ export default function Home() {
           />
         </video>
         {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-blue-600 to-white/30 backdrop-blur-[2px]" />
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-blue-600 to-white/30 backdrop-blur-[2px]" /> */}
       </div>
 
       <AnimatePresence mode="wait">
@@ -101,7 +101,7 @@ export default function Home() {
                   variants={itemVariants}
                   className="text-6xl md:text-8xl font-black text-white mb-8 drop-shadow-lg leading-tight"
                 >
-                  DEEPDROP
+                  DEEPDROP1
                   <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-white to-blue-400">
                     ENERGY LIMITED
