@@ -7,6 +7,19 @@ export const staffAPI = {
 
   create: (data) => {
     const formData = new FormData();
+    // check what fields are present and append to formData
+    console.log("Creating staff with data:", data);
+
+    if (!data.position) {
+      alert("Position is required");
+      return;
+    }
+
+    if (!data.baseSalary || isNaN(data.baseSalary)) {
+      alert("Base Salary is required and must be a number");
+      return;
+    }
+
      formData.append("staffId", data.staffId);
      formData.append("firstName", data.firstName);
      formData.append("lastName", data.lastName);
