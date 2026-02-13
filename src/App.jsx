@@ -87,7 +87,7 @@ function App() {
 />
 
 <Route
-  path="/dashboard/staff/edit/:id"
+  path="/dashboard/staff/:id/edit"
   element={
     <ProtectedRoute>
       <EditStaff />
