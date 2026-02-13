@@ -48,7 +48,7 @@ export default function StaffList() {
 
     {/* RIGHT: CTA */}
     <Link
-      to="/dashboard/staff/new"
+      to="/dashboard/staff/add"
       className="btn-primary flex items-center gap-2 px-6 py-3 shadow-md hover:shadow-lg transition-all"
     >
       <span className="text-lg leading-none">+</span>

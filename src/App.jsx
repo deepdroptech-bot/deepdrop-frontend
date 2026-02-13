@@ -4,13 +4,25 @@ import GetStarted from "./pages/GetStarted";
 import Login from "./pages/Login"
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+//User management pages
+import ProfilePage from "./pages/dashboard/ProfilePage";
+import CreateUserModal from "./pages/dashboard/users/CreateUserModal";
+import UsersPage from "./pages/dashboard/users/UsersPage";
+import EditUserModal from "./pages/dashboard/users/EditUserModal";
+
+// Staff Management pages
 import StaffProfile from "./pages/dashboard/staff/StaffProfile";
+import StaffList from "./pages/dashboard/staff/StaffList";
+import CreateStaff from "./pages/dashboard/staff/CreateStaff";
+import EditStaff from "./pages/dashboard/staff/EditStaff";
+import staffAdjustments from "./pages/dashboard/staff/StaffAdjustments";
+
 // import { useEffect, useState } from "react";
 
 // import { useState, useEffect } from "react";
 // import Loader from "./components/Loader";
 
-import ProfilePage from "./pages/dashboard/ProfilePage";
 import Test from "./pages/Test";
 
 function App() {
@@ -45,11 +57,49 @@ function App() {
      </ProtectedRoute>
   }
 />
+// User management routes
 <Route
   path="/dashboard/profile"
   element={
     <ProtectedRoute>
       <ProfilePage />
+    </ProtectedRoute>
+  }
+/>
+
+// Staff management routes
+<Route
+  path="/dashboard/staff"
+  element={
+    <ProtectedRoute>
+      <StaffList />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/dashboard/staff/new"
+  element={
+    <ProtectedRoute>
+      <CreateStaff />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/dashboard/staff/edit/:id"
+  element={
+    <ProtectedRoute>
+      <EditStaff />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/dashboard/staff/adjustments/:id"
+  element={
+    <ProtectedRoute>
+      <staffAdjustments />
     </ProtectedRoute>
   }
 />
