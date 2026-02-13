@@ -171,11 +171,11 @@ return (
             required
           >
             <option value="">Select Position</option>
-            <option value="pump_attendant">Pump Attendant</option>
-            <option value="cashier">Cashier</option>
-            <option value="supervisor">Supervisor</option>
-            <option value="manager">Manager</option>
-            <option value="accountant">Accountant</option>
+            <option value="Pump Attendant">Pump Attendant</option>
+            <option value="Cashier">Cashier</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Manager">Manager</option>
+            <option value="Accountant">Accountant</option>
           </select>
 
           <input
