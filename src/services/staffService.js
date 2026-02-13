@@ -5,15 +5,34 @@ export const staffAPI = {
 
   getById: (id) => axios.get(`/staff/${id}`),
 
-  create: (data) =>
-    axios.post("/staff", data, {
-      headers: { "Content-Type": "multipart/form-data" }
-    }),
+  create: (data) => {
+    const formData = new FormData();
+     formData.append("staffId", data.staffId);
+     formData.append("firstName", data.firstName);
+     formData.append("lastName", data.lastName);
+     formData.append("phone", data.phone);
+     formData.append("position", data.position);
+     formData.append("baseSalary", data.baseSalary);
+     formData.append("nin", data.nin);
+     if (data.photo) {
+       formData.append("photo", data.photo);
+     }
+    return axios.post("/staff", formData,);
+  },
 
-  update: (id, data) =>
-    axios.put(`/staff/${id}`, data, {
-      headers: { "Content-Type": "multipart/form-data" }
-    }),
+  update: (id, data) => {
+    const formData = new FormData();
+     if (data.firstName) formData.append("firstName", data.firstName);
+     if (data.lastName) formData.append("lastName", data.lastName);
+     if (data.phone) formData.append("phone", data.phone);
+     if (data.position) formData.append("position", data.position);
+     if (data.baseSalary) formData.append("baseSalary", data.baseSalary);
+     if (data.nin) formData.append("nin", data.nin);
+     if (data.employmentStatus) formData.append("employmentStatus", data.employmentStatus);
+      if (data.photo) formData.append("photo", data.photo);
+    return axios.put(`/staff/${id}`, formData);
+  },
+    
 
   addBonus: (id, data) =>
     axios.patch(`/staff/${id}/bonus`, data),
