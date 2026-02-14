@@ -9,19 +9,36 @@ export default function CreateStaff() {
   const [success, setSuccess] = useState(null);
 
   const handleSubmit = async e => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = new FormData();
-    Object.keys(form).forEach(key => data.append(key, form[key]));
-    if (photo) data.append("photo", photo);
+  if (!form.position) {
+    alert("Position is required");
+    return;
+  }
 
-    await staffAPI.create(data);
-    setSuccess("Staff created successfully!");
-    setTimeout(() => {
-      setSuccess(null);
-      navigate("/dashboard/staff");
-    }, 2000);
-  };
+  if (!form.baseSalary || isNaN(form.baseSalary)) {
+    alert("Base Salary must be a number");
+    return;
+  }
+
+  const data = new FormData();
+
+  Object.keys(form).forEach(key => {
+    if (form[key] !== undefined && form[key] !== "") {
+      data.append(key, form[key]);
+    }
+  });
+
+  if (photo) data.append("photo", photo);
+
+  await staffAPI.create(data);
+
+  setSuccess("Staff created successfully!");
+  setTimeout(() => {
+    setSuccess(null);
+    navigate("/dashboard/staff");
+  }, 2000);
+};
 
  return (
   <div className="min-h-[80vh] flex items-center justify-center px-4">
