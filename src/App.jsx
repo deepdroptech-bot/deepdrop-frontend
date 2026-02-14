@@ -4,6 +4,7 @@ import GetStarted from "./pages/GetStarted";
 import Login from "./pages/Login"
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProtectedRoute from "./components/ProtectedRoute";
+import DashboardSummary from "./pages/dashboard/DashboardSummary";
 
 //User management pages
 import ProfilePage from "./pages/dashboard/ProfilePage";
