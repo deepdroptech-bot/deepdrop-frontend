@@ -1,4 +1,4 @@
-import { StatCard } from '../../components/dashboard'
+import { StatCard } from '../../components/dashboard/StatCard'
 import PageLoader from '../../components/dashboard/PageLoader'
 import api from '../../services/api'
 import { useEffect, useState } from 'react'
