@@ -67,6 +67,12 @@ function App() {
   }
 />
 
+<ProtectedRoute>
+  <Route path="/dashboard/users" element={<UsersPage />} />
+  <Route path="/dashboard/users/new" element={<CreateUserModal />} />
+  <Route path="/dashboard/users/:id/edit" element={<EditUserModal />} />
+</ProtectedRoute>
+
 // Staff management routes
 <Route
   path="/dashboard/staff"

@@ -51,122 +51,198 @@ export default function StaffProfile() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* HEADER */}
-      <div className="flex items-center gap-6 bg-white p-6 rounded-xl shadow">
-        <img
-          src={staff.photo?.url || "/avatar.png"}
-          className="w-24 h-24 rounded-full object-cover border"
-        />
+  <div className="space-y-10">
 
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold">
-            {staff.firstName} {staff.lastName}
-          </h1>
-          <p className="text-gray-500 capitalize">
-            {staff.position.replace("_", " ")}
-          </p>
-          <p className="text-sm text-gray-400">Staff ID: {staff.staffId}</p>
-        </div>
+    {/* HEADER CARD */}
+    <div className="bg-white/70 backdrop-blur-2xl border border-white/40 shadow-2xl rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
 
-        <span
-          className={`px-4 py-1 rounded-full text-sm font-medium ${
-            staff.isActive
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {staff.employmentStatus}
-        </span>
+      <img
+        src={staff.photo?.url || "/avatar.png"}
+        className="w-28 h-28 rounded-3xl object-cover border-4 border-white shadow-lg"
+        alt="staff"
+      />
+
+      <div className="flex-1 text-center md:text-left">
+        <h1 className="text-3xl font-extrabold text-gray-900">
+          {staff.firstName} {staff.lastName}
+        </h1>
+
+        <p className="text-gray-500 mt-1 text-lg capitalize">
+          {staff.position.replace("_", " ")}
+        </p>
+
+        <p className="text-sm text-gray-400 mt-1">
+          Staff ID: {staff.staffId}
+        </p>
       </div>
 
-      {/* INFO GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* BIO */}
-        <div className="card">
-          <h3 className="font-semibold mb-4">Staff Information</h3>
-          <ul className="space-y-2 text-sm">
-            <li><strong>Phone:</strong> {staff.phone}</li>
-            <li><strong>NIN:</strong> {staff.nin}</li>
-            <li><strong>Hire Date:</strong> {new Date(staff.hireDate).toDateString()}</li>
-          </ul>
-        </div>
+      <span
+        className={`px-6 py-2 rounded-full text-sm font-semibold shadow ${
+          staff.isActive
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+        }`}
+      >
+        {staff.employmentStatus}
+      </span>
+    </div>
 
-        {/* SALARY */}
-        <div className="card">
-          <h3 className="font-semibold mb-4">Salary Overview</h3>
-          <ul className="space-y-2 text-sm">
-            <li>Base Salary: ₦{staff.baseSalary.toLocaleString()}</li>
-            <li>Total Bonuses: ₦{staff.bonuses.reduce((s,b)=>s+b.amount,0).toLocaleString()}</li>
-            <li>Total Deductions: ₦{staff.deductions.reduce((s,d)=>s+d.amount,0).toLocaleString()}</li>
-            <li className="font-bold text-lg">
-              Net Salary: ₦{staff.netSalary.toLocaleString()}
+
+    {/* INFO + SALARY GRID */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      {/* STAFF INFO */}
+      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition">
+        <h3 className="text-xl font-bold mb-6 text-gray-800">
+          Staff Information
+        </h3>
+
+        <ul className="space-y-4 text-gray-600">
+          <li><span className="font-semibold text-gray-800">Phone:</span> {staff.phone}</li>
+          <li><span className="font-semibold text-gray-800">NIN:</span> {staff.nin}</li>
+          <li>
+            <span className="font-semibold text-gray-800">Hire Date:</span>{" "}
+            {new Date(staff.hireDate).toDateString()}
+          </li>
+        </ul>
+      </div>
+
+
+      {/* SALARY CARD */}
+      <div className="relative bg-gradient-to-tr from-red-500 via-orange-400 to-blue-600 rounded-3xl p-[2px] shadow-2xl">
+        <div className="bg-white rounded-3xl p-8 h-full">
+
+          <h3 className="text-xl font-bold mb-6 text-gray-800">
+            Salary Overview
+          </h3>
+
+          <ul className="space-y-4 text-gray-700">
+            <li className="flex justify-between">
+              <span>Base Salary</span>
+              <span className="font-semibold">
+                ₦{staff.baseSalary.toLocaleString()}
+              </span>
+            </li>
+
+            <li className="flex justify-between">
+              <span>Total Bonuses</span>
+              <span className="text-green-600 font-semibold">
+                ₦{staff.bonuses.reduce((s,b)=>s+b.amount,0).toLocaleString()}
+              </span>
+            </li>
+
+            <li className="flex justify-between">
+              <span>Total Deductions</span>
+              <span className="text-red-600 font-semibold">
+                ₦{staff.deductions.reduce((s,d)=>s+d.amount,0).toLocaleString()}
+              </span>
+            </li>
+
+            <li className="flex justify-between text-xl font-bold border-t pt-4">
+              <span>Net Salary</span>
+              <span>
+                ₦{staff.netSalary.toLocaleString()}
+              </span>
             </li>
           </ul>
         </div>
       </div>
+    </div>
 
-      {/* ADJUSTMENTS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* BONUS */}
-        <div className="card">
-          <h3 className="font-semibold mb-3">Add Bonus</h3>
-          <input
-            placeholder="Amount"
-            type="number"
-            value={bonus.amount}
-            onChange={e => setBonus({ ...bonus, amount: e.target.value })}
-          />
-          <input
-            placeholder="Reason"
-            value={bonus.reason}
-            onChange={e => setBonus({ ...bonus, reason: e.target.value })}
-          />
-          <button className="btn-primary mt-2" onClick={handleBonus}>
-            Add Bonus
-          </button>
-        </div>
 
-        {/* DEDUCTION */}
-        <div className="card">
-          <h3 className="font-semibold mb-3">Add Deduction</h3>
-          <input
-            placeholder="Amount"
-            type="number"
-            value={deduction.amount}
-            onChange={e => setDeduction({ ...deduction, amount: e.target.value })}
-          />
-          <input
-            placeholder="Reason"
-            value={deduction.reason}
-            onChange={e => setDeduction({ ...deduction, reason: e.target.value })}
-          />
-          <button className="btn-secondary mt-2" onClick={handleDeduction}>
-            Apply Deduction
-          </button>
-        </div>
+    {/* BONUS & DEDUCTION */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      {/* BONUS */}
+      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl shadow-xl p-8 space-y-4">
+        <h3 className="text-lg font-bold text-gray-800">
+          Add Bonus
+        </h3>
+
+        <input
+          placeholder="Amount"
+          type="number"
+          value={bonus.amount}
+          onChange={e => setBonus({ ...bonus, amount: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-400 outline-none"
+        />
+
+        <input
+          placeholder="Reason"
+          value={bonus.reason}
+          onChange={e => setBonus({ ...bonus, reason: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-400 outline-none"
+        />
+
+        <button
+          className="w-full py-3 rounded-xl font-semibold text-white bg-green-500 hover:bg-green-600 transition shadow"
+          onClick={handleBonus}
+        >
+          Add Bonus
+        </button>
       </div>
 
-      {/* ACTIONS */}
-      <div className="flex gap-4">
-        <button
-          className="btn-outline"
-          onClick={() => navigate(`/dashboard/staff/${id}/edit`)}
-        >
-          Edit Staff
-        </button>
+
+      {/* DEDUCTION */}
+      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl shadow-xl p-8 space-y-4">
+        <h3 className="text-lg font-bold text-gray-800">
+          Apply Deduction
+        </h3>
+
+        <input
+          placeholder="Amount"
+          type="number"
+          value={deduction.amount}
+          onChange={e => setDeduction({ ...deduction, amount: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-400 outline-none"
+        />
+
+        <input
+          placeholder="Reason"
+          value={deduction.reason}
+          onChange={e => setDeduction({ ...deduction, reason: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-400 outline-none"
+        />
 
         <button
-          className={staff.isActive ? "btn-warning" : "btn-success"}
-          onClick={toggleStatus}
+          className="w-full py-3 rounded-xl font-semibold text-white bg-red-500 hover:bg-red-600 transition shadow"
+          onClick={handleDeduction}
         >
-          {staff.isActive ? "Deactivate" : "Activate"}
-        </button>
-
-        <button className="btn-danger" onClick={deleteStaff}>
-          Delete Staff
+          Apply Deduction
         </button>
       </div>
     </div>
-  );
+
+
+    {/* ACTION BUTTONS */}
+    <div className="flex flex-wrap gap-4 pt-4">
+
+      <button
+        className="px-6 py-3 rounded-2xl font-semibold bg-white border border-gray-300 shadow hover:shadow-lg transition"
+        onClick={() => navigate(`/dashboard/staff/${id}/edit`)}
+      >
+        Edit Staff
+      </button>
+
+      <button
+        className={`px-6 py-3 rounded-2xl font-semibold text-white shadow transition ${
+          staff.isActive
+            ? "bg-yellow-500 hover:bg-yellow-600"
+            : "bg-green-600 hover:bg-green-700"
+        }`}
+        onClick={toggleStatus}
+      >
+        {staff.isActive ? "Deactivate" : "Activate"}
+      </button>
+
+      <button
+        className="px-6 py-3 rounded-2xl font-semibold text-white bg-red-600 hover:bg-red-700 shadow transition"
+        onClick={deleteStaff}
+      >
+        Delete Staff
+      </button>
+    </div>
+
+  </div>
+);
 }
