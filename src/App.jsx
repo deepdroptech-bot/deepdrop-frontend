@@ -55,6 +55,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
   <Route path="/dashboard" element={<DashboardHome />}>
 
+    <Route index element={<DashboardSummary />} />
+
     {/* User management routes */}
     <Route path="myprofile" element={<ProfilePage />} />
     <Route path="allusers" element={<UsersPage />} />
@@ -70,6 +72,7 @@ function App() {
 
   </Route>
 </Route>
+
 
 
 
