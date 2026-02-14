@@ -16,7 +16,7 @@ import StaffProfile from "./pages/dashboard/staff/StaffProfile";
 import StaffList from "./pages/dashboard/staff/StaffList";
 import CreateStaff from "./pages/dashboard/staff/CreateStaff";
 import EditStaff from "./pages/dashboard/staff/EditStaff";
-import staffAdjustments from "./pages/dashboard/staff/StaffAdjustments";
+import StaffAdjustments from "./pages/dashboard/staff/StaffAdjustments";
 
 // import { useEffect, useState } from "react";
 
