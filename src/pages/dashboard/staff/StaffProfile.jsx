@@ -244,5 +244,4 @@ export default function StaffProfile() {
     </div>
 
   </div>
-);
-}
+);}

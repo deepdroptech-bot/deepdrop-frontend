@@ -58,66 +58,25 @@ function App() {
   }
 />
 // User management routes
-<Route
-  path="/dashboard/profile"
-  element={
-    <ProtectedRoute>
-      <ProfilePage />
-    </ProtectedRoute>
-  }
-/>
-
+<Route>
 <ProtectedRoute>
+  <Route path="/dashboard/profile" element={<ProfilePage />} />
   <Route path="/dashboard/users" element={<UsersPage />} />
   <Route path="/dashboard/users/new" element={<CreateUserModal />} />
   <Route path="/dashboard/users/:id/edit" element={<EditUserModal />} />
 </ProtectedRoute>
+</Route>
 
 // Staff management routes
-<Route
-  path="/dashboard/staff"
-  element={
-    <ProtectedRoute>
-      <StaffList />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/dashboard/staff/new"
-  element={
-    <ProtectedRoute>
-      <CreateStaff />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/dashboard/staff/:id/edit"
-  element={
-    <ProtectedRoute>
-      <EditStaff />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/dashboard/staff/adjustments/:id"
-  element={
-    <ProtectedRoute>
-      <staffAdjustments />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/dashboard/staff/:id"
-  element={
-    <ProtectedRoute>
-      <StaffProfile />
-    </ProtectedRoute>
-  }
-/>
+<Route>
+<ProtectedRoute>
+  <Route path="/dashboard/staff" element={<StaffList />} />
+  <Route path="/dashboard/staff/new" element={<CreateStaff />} />
+  <Route path="/dashboard/staff/:id/edit" element={<EditStaff />} />
+  <Route path="/dashboard/staff/adjustments/:id" element={<staffAdjustments />} />
+  <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
+</ProtectedRoute>
+</Route>
 
 <Route path="/test" element={<Test />} />
 
