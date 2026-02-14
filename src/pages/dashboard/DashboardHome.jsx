@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import StatCard from '../../components/dashboard/StatCard'
 import PageLoader from '../../components/dashboard/PageLoader'
 import api from '../../services/api'
+import DashboardLayout from '../../components/dashboard/Layout'
+import { Outlet } from 'react-router-dom'
 
 export default function DashboardHome() {
   const [data, setData] = useState(null)
@@ -22,6 +24,8 @@ export default function DashboardHome() {
         value={data.currentPL.amount}
         status={data.currentPL.status}
       />
+
+      <Outlet />
     </div>
   )
 }

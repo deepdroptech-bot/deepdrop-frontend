@@ -43,36 +43,34 @@ function App() {
 
   return (
     <BrowserRouter>
+   {/* Public routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/get-started" element={<GetStarted />} />
         <Route path="/login/agbor-rd" element={<Login />} />
         <Route path="/login/ekiosa" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route
-  path="/dashboard"
-  element={
-     <ProtectedRoute>
-      <DashboardHome />
-     </ProtectedRoute>
-  }
-/>
-// User management routes
-<Route element={<ProtectedRoute />}>
- <Route path="/dashboard/myprofile" element={<ProfilePage />} />
- <Route path="/dashboard/allusers" element={<UsersPage />} />
- <Route path="/dashboard/createuser" element={<CreateUserModal />} />
- <Route path="/dashboard/edituser" element={<EditUserModal />} />
+
+ {/* Protected dashboard routes */}
+        <Route element={<ProtectedRoute />}>
+  <Route path="/dashboard" element={<DashboardHome />}>
+
+    {/* User management routes */}
+    <Route path="myprofile" element={<ProfilePage />} />
+    <Route path="allusers" element={<UsersPage />} />
+    <Route path="createuser" element={<CreateUserModal />} />
+    <Route path="edituser" element={<EditUserModal />} />
+
+    {/* Staff management routes */}
+    <Route path="staff" element={<StaffList />} />
+    <Route path="staff/new" element={<CreateStaff />} />
+    <Route path="staff/:id/edit" element={<EditStaff />} />
+    <Route path="staff/adjustments/:id" element={<StaffAdjustments />} />
+    <Route path="staff/:id" element={<StaffProfile />} />
+
+  </Route>
 </Route>
 
-// Staff management routes
-<Route element={<ProtectedRoute />}>
-  <Route path="/dashboard/staff" element={<StaffList />} />
-  <Route path="/dashboard/staff/new" element={<CreateStaff />} />
-  <Route path="/dashboard/staff/:id/edit" element={<EditStaff />} />
-  <Route path="/dashboard/staff/adjustments/:id" element={<StaffAdjustments />} />
-  <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
-</Route>
 
 
 <Route path="/test" element={<Test />} />
