@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { dailySalesAPI } from "../../../services/dailySalesService";
 
 export default function DailySalesSummary() {
   const [summary, setSummary] = useState(null);
