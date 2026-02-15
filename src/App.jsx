@@ -19,6 +19,11 @@ import CreateStaff from "./pages/dashboard/staff/CreateStaff";
 import EditStaff from "./pages/dashboard/staff/EditStaff";
 import StaffAdjustments from "./pages/dashboard/staff/StaffAdjustments";
 
+// Daily Sales Management pages
+import DailySalesSummary from "./pages/dashboard/dailysales/DailySalesSummary";
+import DailySalesManagement from "./pages/dashboard/dailysales/DailySalesManagement";
+import EditDailySales from "./pages/dashboard/dailysales/EditDailySales";
+
 // import { useEffect, useState } from "react";
 
 // import { useState, useEffect } from "react";
@@ -70,6 +75,11 @@ function App() {
     <Route path="staff/:id/edit" element={<EditStaff />} />
     <Route path="staff/adjustments/:id" element={<StaffAdjustments />} />
     <Route path="staff/:id" element={<StaffProfile />} />
+
+    {/* Daily sales management routes */}
+    <Route path="daily-sales" element={<DailySalesManagement />} />
+    <Route path="daily-sales/summary" element={<DailySalesSummary />} />
+    <Route path="daily-sales/:id/edit" element={<EditDailySales />} />
 
   </Route>
 </Route>

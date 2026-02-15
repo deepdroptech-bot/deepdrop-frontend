@@ -78,29 +78,43 @@ export default function EditStaff() {
   );
 
 return (
-  <div className="max-w-3xl mx-auto space-y-8">
+  <div className="max-w-4xl mx-auto px-4 md:px-0 py-8 space-y-10">
+
     {/* PAGE HEADER */}
-    <div>
-      <h1 className="text-3xl font-bold text-gray-800">
-        Edit Staff
-      </h1>
-      <p className="text-gray-500 mt-1">
-        Update staff information and employment details
-      </p>
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          Edit Staff
+        </h1>
+        <p className="text-gray-500 mt-1">
+          Update staff information and employment details
+        </p>
+      </div>
+
+      <div className="text-sm text-gray-400">
+        Staff Management / Edit
+      </div>
     </div>
 
-    <form onSubmit={handleSubmit} className="space-y-8">
-      {/* PHOTO CARD */}
-      <div className="card flex items-center gap-6">
-        <img
-          src={preview || "/avatar.png"}
-          className="w-24 h-24 rounded-full object-cover border border-gray-200"
-        />
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-600">
+    <form onSubmit={handleSubmit} className="space-y-8">
+
+      {/* PROFILE CARD */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row md:items-center gap-8">
+
+        <div className="relative">
+          <img
+            src={preview || "/avatar.png"}
+            alt="Profile"
+            className="w-28 h-28 rounded-full object-cover border-4 border-gray-100 shadow-sm"
+          />
+        </div>
+
+        <div className="flex-1 space-y-3">
+          <label className="block text-sm font-semibold text-gray-700">
             Profile Photo
           </label>
+
           <input
             type="file"
             accept="image/*"
@@ -110,24 +124,33 @@ return (
               setPreview(URL.createObjectURL(e.target.files[0]));
             }}
           />
+
           <p className="text-xs text-gray-400">
-            JPG, PNG. Max 5MB.
+            JPG, PNG formats supported. Maximum file size 5MB.
           </p>
         </div>
       </div>
 
-      {/* BASIC INFO */}
-      <div className="card space-y-4">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Personal Information
-        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* PERSONAL INFO */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+        <div className="border-b border-gray-100 pb-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Personal Information
+          </h2>
+          <p className="text-sm text-gray-400 mt-1">
+            Basic personal details of the staff member
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           <input
             name="firstName"
             placeholder="First Name"
             value={form.firstName}
             onChange={handleChange}
+            className="input-primary"
             required
           />
 
@@ -136,6 +159,7 @@ return (
             placeholder="Last Name"
             value={form.lastName}
             onChange={handleChange}
+            className="input-primary"
             required
           />
 
@@ -144,30 +168,41 @@ return (
             placeholder="Phone Number"
             value={form.phone}
             onChange={handleChange}
+            className="input-primary"
             required
           />
 
           <input
             name="nin"
-            placeholder="NIN"
+            placeholder="National Identification Number (NIN)"
             value={form.nin}
             onChange={handleChange}
+            className="input-primary"
             required
           />
+
         </div>
       </div>
 
-      {/* JOB INFO */}
-      <div className="card space-y-4">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Employment Details
-        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* EMPLOYMENT DETAILS */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+        <div className="border-b border-gray-100 pb-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Employment Details
+          </h2>
+          <p className="text-sm text-gray-400 mt-1">
+            Role assignment, salary structure and employment status
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           <select
             name="position"
             value={form.position}
             onChange={handleChange}
+            className="input-primary"
             required
           >
             <option value="">Select Position</option>
@@ -184,6 +219,7 @@ return (
             placeholder="Base Salary"
             value={form.baseSalary}
             onChange={handleChange}
+            className="input-primary"
             required
           />
 
@@ -191,33 +227,48 @@ return (
             name="employmentStatus"
             value={form.employmentStatus}
             onChange={handleChange}
+            className="input-primary"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
             <option value="suspended">Suspended</option>
             <option value="terminated">Terminated</option>
           </select>
+
         </div>
       </div>
 
-      {/* ACTIONS */}
-      <div className="flex gap-4">
-        <button
-          type="submit"
-          disabled={saving}
-          className="btn-primary min-w-[160px]"
-        >
-          {saving ? "Saving changes…" : "Save Changes"}
-        </button>
+
+      {/* ACTION BAR */}
+      <div className="flex justify-between items-center pt-6 border-t border-gray-100">
 
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="btn-outline"
+          className="px-6 py-3 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 transition"
         >
           Cancel
         </button>
+
+        <button
+          type="submit"
+          disabled={saving}
+          className="
+            px-8 py-3
+            rounded-xl
+            bg-gradient-to-tr from-red-500 to-blue-600
+            text-white font-semibold
+            shadow-md hover:shadow-lg
+            hover:scale-[1.02] active:scale-95
+            transition
+            min-w-[180px]
+          "
+        >
+          {saving ? "Saving changes…" : "Save Changes"}
+        </button>
+
       </div>
+
     </form>
   </div>
 );
