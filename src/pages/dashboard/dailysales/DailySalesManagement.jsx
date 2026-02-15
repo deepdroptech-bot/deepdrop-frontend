@@ -6,6 +6,7 @@ export default function DailySalesManagement() {
   const [sales, setSales] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   const fetchSales = async () => {
   const params = {
@@ -23,6 +24,11 @@ export default function DailySalesManagement() {
 };
 
   useEffect(() => {
+    // Simulate loading time for better UX
+    setLoading(true);
+    const timer = setTimeout(() => {
+      fetchSales().finally(() => setLoading(false));
+    }, 1000);
     fetchSales();
   }, [activeTab]);
 

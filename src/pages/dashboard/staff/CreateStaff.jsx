@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { staffAPI } from "../../../services/staffService";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function CreateStaff() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
   const [photo, setPhoto] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+       // Simulate loading time for better UX
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async e => {
   e.preventDefault();

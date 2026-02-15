@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dailySalesAPI } from "../../../services/dailySalesService";
+import { useEffect } from "react";
 
 export default function CreateDailySales() {
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     salesDate: "",
@@ -32,6 +35,13 @@ export default function CreateDailySales() {
       { itemName: "", amount: "" }
     ]
   });
+
+  useEffect(() => {
+    // Simulate loading time for better UX
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   /* =========================
      HANDLERS
