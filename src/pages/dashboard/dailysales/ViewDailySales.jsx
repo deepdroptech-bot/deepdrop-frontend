@@ -24,22 +24,46 @@ export default function ViewDailySales() {
   const fetchSales = async () => {
     try {
       const res = await dailySalesAPI.getById(id);
-      setSales(res.data.sales);
-    } catch (err) {
-      console.error(err);
-    } finally {
+      setSales(res.data);
       setLoading(false);
+    } catch (err) {
+      alert("Failed to load daily sales");
+      navigate("/dashboard/daily-sales");
     }
   };
 
   if (loading)
-    return (
-      <Box textAlign="center" mt={5}>
-        <CircularProgress />
-      </Box>
-    );
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
+        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-red-500 to-blue-600 flex items-center justify-center animate-pulse">
+          <span className="text-white text-2xl font-black">⏳</span>
+        </div>
+        <h2 className="text-2xl font-extrabold text-gray-800 mb-2">
+          Loading Sales Record
+        </h2>
+        <p className="text-gray-500 text-base">
+          Please wait while we fetch the sales record details
+        </p>
+      </div>
+    </div>
+  );
 
-  if (!sales) return <Typography>No sales record found.</Typography>;
+  if (!sales) return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
+        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-red-500 to-blue-600 flex items-center justify-center">
+          <span className="text-white text-2xl font-black">⚠️</span>
+        </div>
+        <h2 className="text-2xl font-extrabold text-gray-800 mb-2">
+          Sales Record Not Found
+        </h2>
+        <p className="text-gray-500 text-base">
+          The requested sales record does not exist.
+        </p>
+      </div>
+    </div>
+  );
 
   const formatCurrency = (value) =>
     `₦${Number(value || 0).toLocaleString()}`;
