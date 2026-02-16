@@ -23,6 +23,7 @@ import StaffAdjustments from "./pages/dashboard/staff/StaffAdjustments";
 import DailySalesSummary from "./pages/dashboard/dailysales/DailySalesSummary";
 import DailySalesManagement from "./pages/dashboard/dailysales/DailySalesManagement";
 import EditDailySales from "./pages/dashboard/dailysales/EditDailySales";
+import CCreateDailySales from "./pages/dashboard/dailysales/CreateDailySales";
 
 // import { useEffect, useState } from "react";
 
@@ -80,6 +81,7 @@ function App() {
     <Route path="daily-sales" element={<DailySalesManagement />} />
     <Route path="daily-sales/summary" element={<DailySalesSummary />} />
     <Route path="daily-sales/:id/edit" element={<EditDailySales />} />
+    <Route path="daily-sales/new" element={<CCreateDailySales />} />
 
   </Route>
 </Route>
