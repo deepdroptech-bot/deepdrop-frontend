@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { dailySalesAPI } from "../../../services/dailySalesService";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Divider,
-  Chip,
-  CircularProgress,
-  Box
-} from "@mui/material";
 
 export default function ViewDailySales() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [sales, setSales] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +23,9 @@ export default function ViewDailySales() {
     }
   };
 
+  const formatCurrency = (value) =>
+    `₦${Number(value || 0).toLocaleString()}`;
+
   if (loading)
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
@@ -40,226 +34,203 @@ export default function ViewDailySales() {
           <span className="text-white text-2xl font-black">⏳</span>
         </div>
         <h2 className="text-2xl font-extrabold text-gray-800 mb-2">
-          Loading Sales Record
+          Loading Daily Sales Records For Viewing
         </h2>
         <p className="text-gray-500 text-base">
-          Please wait while we fetch the sales record details
+          Please wait while we fetch daily sales records for viewing
         </p>
       </div>
     </div>
   );
 
-  if (!sales) return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
-        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-red-500 to-blue-600 flex items-center justify-center">
-          <span className="text-white text-2xl font-black">⚠️</span>
+  if (!sales)
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-10 text-center">
+          <h2 className="text-2xl font-bold text-red-600">
+            Sales Record Not Found
+          </h2>
         </div>
-        <h2 className="text-2xl font-extrabold text-gray-800 mb-2">
-          Sales Record Not Found
-        </h2>
-        <p className="text-gray-500 text-base">
-          The requested sales record does not exist.
-        </p>
       </div>
-    </div>
-  );
-
-  const formatCurrency = (value) =>
-    `₦${Number(value || 0).toLocaleString()}`;
+    );
 
   return (
-    <Box p={4}>
+    <div className="p-6 space-y-8">
 
-      {/* HEADER */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4" fontWeight="bold">
-          Daily Sales Report
-        </Typography>
+      {/* ================= HEADER ================= */}
+      <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-xl">
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-800">
+            Daily Sales Report
+          </h1>
+          <p className="text-gray-500">
+            {new Date(sales.salesDate).toDateString()}
+          </p>
+        </div>
 
-        <Chip
-          label={sales.approvalStatus.toUpperCase()}
-          color={
+        <span
+          className={`px-4 py-2 rounded-full text-sm font-bold ${
             sales.approvalStatus === "approved"
-              ? "success"
+              ? "bg-green-100 text-green-600"
               : sales.approvalStatus === "submitted"
-              ? "warning"
-              : "default"
-          }
-        />
-      </Box>
+              ? "bg-yellow-100 text-yellow-600"
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {sales.approvalStatus.toUpperCase()}
+        </span>
+      </div>
 
-      <Typography variant="subtitle1" mb={3}>
-        Date: {new Date(sales.salesDate).toDateString()}
-      </Typography>
+      {/* ================= PMS & AGO ================= */}
+      <div className="grid md:grid-cols-2 gap-6">
 
-      <Grid container spacing={3}>
+        {/* PMS */}
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition">
+          <h2 className="text-xl font-bold text-blue-800 mb-4">
+            PMS Sales
+          </h2>
 
-        {/* ================= PMS ================= */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                PMS Sales
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+          {sales.PMS.pumps.map((pump) => (
+            <div
+              key={pump.pumpNumber}
+              className="mb-4 p-4 bg-white rounded-xl shadow"
+            >
+              <p className="font-semibold text-gray-700">
+                Pump {pump.pumpNumber}
+              </p>
+              <p>Opening: {pump.openingMeter}</p>
+              <p>Closing: {pump.closingMeter}</p>
+              <p className="font-medium text-blue-700">
+                Litres Sold: {pump.litresSold}
+              </p>
+            </div>
+          ))}
 
-              {sales.PMS.pumps.map((pump) => (
-                <Box key={pump.pumpNumber} mb={2}>
-                  <Typography fontWeight="bold">
-                    Pump {pump.pumpNumber}
-                  </Typography>
-                  <Typography>Opening: {pump.openingMeter}</Typography>
-                  <Typography>Closing: {pump.closingMeter}</Typography>
-                  <Typography>Litres Sold: {pump.litresSold}</Typography>
-                </Box>
-              ))}
+          <div className="border-t pt-4 space-y-1">
+            <p>Price/Litre: {formatCurrency(sales.PMS.pricePerLitre)}</p>
+            <p>Total Litres: {sales.PMS.totalLitres}</p>
+            <p>Total Amount: {formatCurrency(sales.PMS.totalAmount)}</p>
 
-              <Divider sx={{ my: 2 }} />
+            {/* PMS Expense Details */}
+            {sales.PMS.expenses?.map((expense, i) => (
+              <div key={i} className="flex justify-between text-sm text-gray-600">
+                <span>{expense.description}</span>
+                <span>{formatCurrency(expense.amount)}</span>
+              </div>
+            ))}
 
-              <Typography>Price/Litre: {formatCurrency(sales.PMS.pricePerLitre)}</Typography>
-              <Typography>Total Litres: {sales.PMS.totalLitres}</Typography>
-              <Typography>Total Amount: {formatCurrency(sales.PMS.totalAmount)}</Typography>
-              <Typography>Total Expenses: {formatCurrency(sales.PMS.totalExpenses)}</Typography>
-              <Typography fontWeight="bold">
-                Net Sales: {formatCurrency(sales.PMS.netSales)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+            <p>Total Expenses: {formatCurrency(sales.PMS.totalExpenses)}</p>
 
-        {/* ================= AGO ================= */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                AGO Sales
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+            <p className="font-bold text-lg text-blue-900 mt-2">
+              Net Sales: {formatCurrency(sales.PMS.netSales)}
+            </p>
+          </div>
+        </div>
 
-              <Typography>Opening: {sales.AGO?.openingMeter}</Typography>
-              <Typography>Closing: {sales.AGO?.closingMeter}</Typography>
-              <Typography>Litres Sold: {sales.AGO?.litresSold}</Typography>
-              <Typography>Price/Litre: {formatCurrency(sales.AGO?.pricePerLitre)}</Typography>
-              <Typography>Total Amount: {formatCurrency(sales.AGO?.totalAmount)}</Typography>
-              <Typography>Total Expenses: {formatCurrency(sales.AGO?.totalExpenses)}</Typography>
-              <Typography fontWeight="bold">
-                Net Sales: {formatCurrency(sales.AGO?.netSales)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        {/* AGO */}
+        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition">
+          <h2 className="text-xl font-bold text-green-800 mb-4">
+            AGO Sales
+          </h2>
 
-        {/* ================= PRODUCTS ================= */}
-        <Grid item xs={12}>
-          <Card elevation={3}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Products Sold
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+          <div className="space-y-1">
+            <p>Opening: {sales.AGO?.openingMeter}</p>
+            <p>Closing: {sales.AGO?.closingMeter}</p>
+            <p className="font-medium text-green-700">
+              Litres Sold: {sales.AGO?.litresSold}
+            </p>
+            <p>Price/Litre: {formatCurrency(sales.AGO?.pricePerLitre)}</p>
+            <p>Total Amount: {formatCurrency(sales.AGO?.totalAmount)}</p>
 
-              {sales.productsSold.map((item, index) => (
-                <Box key={index} mb={1}>
-                  <Typography>
-                    {item.itemName} — Qty: {item.quantitySold} × {formatCurrency(item.pricePerUnit)} ={" "}
-                    {formatCurrency(item.totalAmount)}
-                  </Typography>
-                </Box>
-              ))}
+            {/* AGO Expense Details */}
+            {sales.AGO?.expenses?.map((expense, i) => (
+              <div key={i} className="flex justify-between text-sm text-gray-600">
+                <span>{expense.description}</span>
+                <span>{formatCurrency(expense.amount)}</span>
+              </div>
+            ))}
 
-              <Divider sx={{ my: 2 }} />
-              <Typography fontWeight="bold">
-                Total Product Sales: {formatCurrency(sales.totalProductsSales)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+             <p>Total Expenses: {formatCurrency(sales.AGO?.totalExpenses)}</p>
 
-        {/* ================= OTHER INCOME ================= */}
-        <Grid item xs={12}>
-          <Card elevation={3}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Other Income
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+            <p className="font-bold text-lg text-green-900 mt-2">
+              Net Sales: {formatCurrency(sales.AGO?.netSales)}
+            </p>
+          </div>
+        </div>
+      </div>
 
-              {sales.otherIncome.map((item, index) => (
-                <Typography key={index}>
-                  {item.itemName}: {formatCurrency(item.amount)}
-                </Typography>
-              ))}
+      {/* ================= PRODUCTS ================= */}
+      <div className="bg-white p-6 rounded-3xl shadow-xl">
+        <h2 className="text-xl font-bold text-purple-700 mb-4">
+          Products Sold
+        </h2>
 
-              <Divider sx={{ my: 2 }} />
-              <Typography fontWeight="bold">
-                Total Other Income: {formatCurrency(sales.totalOtherIncome)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        {sales.productsSold.map((item, index) => (
+          <div
+            key={index}
+            className="flex justify-between border-b py-2 hover:bg-gray-50 transition"
+          >
+            <span>
+              {item.itemName} ({item.quantitySold} × {formatCurrency(item.pricePerUnit)})
+            </span>
+            <span className="font-semibold text-purple-700">
+              {formatCurrency(item.totalAmount)}
+            </span>
+          </div>
+        ))}
 
-        {/* ================= GRAND SUMMARY ================= */}
-        <Grid item xs={12}>
-          <Card elevation={5}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Financial Summary
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+        <p className="mt-4 font-bold text-lg text-purple-900">
+          Total Product Sales: {formatCurrency(sales.totalProductsSales)}
+        </p>
+      </div>
 
-              <Typography>Total Sales Amount: {formatCurrency(sales.totalSalesAmount)}</Typography>
-              <Typography>Total Expenses: {formatCurrency(sales.totalExpenses)}</Typography>
-              <Typography variant="h6" fontWeight="bold" mt={2}>
-                Net Sales: {formatCurrency(sales.netSales)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+      {/* ================= OTHER INCOME ================= */}
+      <div className="bg-white p-6 rounded-3xl shadow-xl">
+        <h2 className="text-xl font-bold text-indigo-700 mb-4">
+          Other Income
+        </h2>
 
-        {/* ================= AUDIT INFO ================= */}
-        <Grid item xs={12}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Audit Information
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+        {sales.otherIncome.map((item, index) => (
+          <div key={index} className="flex justify-between py-1">
+            <span>{item.itemName}</span>
+            <span className="font-medium">
+              {formatCurrency(item.amount)}
+            </span>
+          </div>
+        ))}
 
-              <Typography>
-                Created By: {sales.createdBy?.name}
-              </Typography>
+        <p className="mt-4 font-bold text-lg text-indigo-900">
+          Total Other Income: {formatCurrency(sales.totalOtherIncome)}
+        </p>
+      </div>
 
-              {sales.submittedBy && (
-                <Typography>
-                  Submitted By: {sales.submittedBy?.name}
-                </Typography>
-              )}
+      {/* ================= SUMMARY ================= */}
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl">
+        <h2 className="text-2xl font-bold mb-4">Financial Summary</h2>
+        <p>Total Sales: {formatCurrency(sales.totalSalesAmount)}</p>
+        <p>Total Expenses: {formatCurrency(sales.totalExpenses)}</p>
+        <p className="text-2xl font-extrabold mt-4">
+          Net Sales: {formatCurrency(sales.netSales)}
+        </p>
+      </div>
 
-              {sales.approvedBy && (
-                <Typography>
-                  Approved By: {sales.approvedBy?.name}
-                </Typography>
-              )}
+      {/* ================= AUDIT ================= */}
+      <div className="bg-white p-6 rounded-3xl shadow-lg">
+        <h2 className="text-xl font-bold text-gray-700 mb-4">
+          Audit Information
+        </h2>
 
-              {sales.updateReason && (
-                <Typography>
-                  Update Reason: {sales.updateReason}
-                </Typography>
-              )}
+        <p>Created By: {sales.createdBy?.name}</p>
+        {sales.submittedBy && <p>Submitted By: {sales.submittedBy?.name}</p>}
+        {sales.approvedBy && <p>Approved By: {sales.approvedBy?.name}</p>}
+        {sales.updateReason && <p>Update Reason: {sales.updateReason}</p>}
 
-              {sales.isLocked && (
-                <Chip
-                  label="LOCKED"
-                  color="error"
-                  sx={{ mt: 2 }}
-                />
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-
-      </Grid>
-    </Box>
+        {sales.isLocked && (
+          <span className="inline-block mt-4 px-4 py-2 bg-red-100 text-red-600 rounded-full font-semibold">
+            LOCKED
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
