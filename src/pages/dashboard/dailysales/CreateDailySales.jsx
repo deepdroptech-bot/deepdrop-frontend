@@ -259,7 +259,7 @@ export default function CreateDailySales() {
             <div key={index} className="flex gap-4">
               <input
                 placeholder="Expense Description"
-                className="input-premium flex-1"
+                className="input-premium"
                 value={expense.description}
                 onChange={e =>
                   handleNestedExpenseChange("PMS", index, "description", e.target.value)
@@ -317,7 +317,7 @@ export default function CreateDailySales() {
             <div key={index} className="flex gap-4">
               <input
                 placeholder="Expense Description"
-                className="input-premium flex-1"
+                className="input-premium"
                 value={expense.description}
                 onChange={e =>
                   handleNestedExpenseChange("AGO", index, "description", e.target.value)

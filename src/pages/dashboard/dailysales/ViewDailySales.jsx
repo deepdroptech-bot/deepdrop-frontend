@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { dailySalesAPI } from "../../../services/dailySalesService";
+import { useParams } from "react-router-dom";
+import api from "../../api";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Divider,
+  Chip,
+  CircularProgress,
+  Box
+} from "@mui/material";
 
 export default function ViewDailySales() {
   const { id } = useParams();
-  const navigate = useNavigate();
-
   const [sales, setSales] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,183 +23,219 @@ export default function ViewDailySales() {
 
   const fetchSales = async () => {
     try {
-      const res = await dailySalesAPI.getById(id);
-      setSales(res.data);
-      setLoading(false);
+      const res = await api.get(`/daily-sales/${id}`);
+      setSales(res.data.sales);
     } catch (err) {
-      alert("Failed to load daily sales");
-      navigate("/dashboard/daily-sales");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) return <p className="p-8">Loading...</p>;
-  if (!sales) return null;
+  if (loading)
+    return (
+      <Box textAlign="center" mt={5}>
+        <CircularProgress />
+      </Box>
+    );
 
-  const statusBadge = sales.isLocked
-    ? "bg-green-100 text-green-700"
-    : "bg-yellow-100 text-yellow-700";
+  if (!sales) return <Typography>No sales record found.</Typography>;
+
+  const formatCurrency = (value) =>
+    `₦${Number(value || 0).toLocaleString()}`;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
+    <Box p={4}>
 
       {/* HEADER */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Daily Sales Report
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {new Date(sales.salesDate).toDateString()}
-          </p>
-        </div>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4" fontWeight="bold">
+          Daily Sales Report
+        </Typography>
 
-        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${statusBadge}`}>
-          {sales.isLocked ? "Approved" : "Draft"}
-        </span>
-      </div>
+        <Chip
+          label={sales.approvalStatus.toUpperCase()}
+          color={
+            sales.approvalStatus === "approved"
+              ? "success"
+              : sales.approvalStatus === "submitted"
+              ? "warning"
+              : "default"
+          }
+        />
+      </Box>
 
+      <Typography variant="subtitle1" mb={3}>
+        Date: {new Date(sales.salesDate).toDateString()}
+      </Typography>
 
-      {/* SUMMARY CARD */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Grid container spacing={3}>
 
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <p className="text-sm text-gray-500">Total PMS Sales</p>
-          <p className="text-2xl font-bold mt-2">
-            ₦{sales.PMS?.totalAmount || 0}
-          </p>
-        </div>
+        {/* ================= PMS ================= */}
+        <Grid item xs={12} md={6}>
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                PMS Sales
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
 
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <p className="text-sm text-gray-500">Total AGO Sales</p>
-          <p className="text-2xl font-bold mt-2">
-            ₦{sales.AGO?.totalAmount || 0}
-          </p>
-        </div>
+              {sales.PMS.pumps.map((pump) => (
+                <Box key={pump.pumpNumber} mb={2}>
+                  <Typography fontWeight="bold">
+                    Pump {pump.pumpNumber}
+                  </Typography>
+                  <Typography>Opening: {pump.openingMeter}</Typography>
+                  <Typography>Closing: {pump.closingMeter}</Typography>
+                  <Typography>Litres Sold: {pump.litresSold}</Typography>
+                </Box>
+              ))}
 
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <p className="text-sm text-gray-500">Net Sales</p>
-          <p className="text-2xl font-bold mt-2 text-blue-600">
-            ₦{sales.netSales || 0}
-          </p>
-        </div>
+              <Divider sx={{ my: 2 }} />
 
-      </div>
+              <Typography>Price/Litre: {formatCurrency(sales.PMS.pricePerLitre)}</Typography>
+              <Typography>Total Litres: {sales.PMS.totalLitres}</Typography>
+              <Typography>Total Amount: {formatCurrency(sales.PMS.totalAmount)}</Typography>
+              <Typography>Total Expenses: {formatCurrency(sales.PMS.totalExpenses)}</Typography>
+              <Typography fontWeight="bold">
+                Net Sales: {formatCurrency(sales.PMS.netSales)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
+        {/* ================= AGO ================= */}
+        <Grid item xs={12} md={6}>
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                AGO Sales
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
 
-      {/* PMS SECTION */}
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-6">
-        <h2 className="text-xl font-semibold text-gray-800">
-          PMS Details
-        </h2>
+              <Typography>Opening: {sales.AGO?.openingMeter}</Typography>
+              <Typography>Closing: {sales.AGO?.closingMeter}</Typography>
+              <Typography>Litres Sold: {sales.AGO?.litresSold}</Typography>
+              <Typography>Price/Litre: {formatCurrency(sales.AGO?.pricePerLitre)}</Typography>
+              <Typography>Total Amount: {formatCurrency(sales.AGO?.totalAmount)}</Typography>
+              <Typography>Total Expenses: {formatCurrency(sales.AGO?.totalExpenses)}</Typography>
+              <Typography fontWeight="bold">
+                Net Sales: {formatCurrency(sales.AGO?.netSales)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-        {sales.PMS?.pumps?.map((pump, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-xl"
-          >
-            <div>
-              <p className="text-xs text-gray-400">Pump</p>
-              <p className="font-semibold">{pump.pumpNumber}</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Opening</p>
-              <p>{pump.openingMeter}</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Closing</p>
-              <p>{pump.closingMeter}</p>
-            </div>
-          </div>
-        ))}
+        {/* ================= PRODUCTS ================= */}
+        <Grid item xs={12}>
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Products Sold
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
 
-        <div>
-          <p className="text-sm text-gray-500">
-            Price Per Litre
-          </p>
-          <p className="font-semibold">
-            ₦{sales.PMS?.pricePerLitre}
-          </p>
-        </div>
-      </div>
+              {sales.productsSold.map((item, index) => (
+                <Box key={index} mb={1}>
+                  <Typography>
+                    {item.itemName} — Qty: {item.quantitySold} × {formatCurrency(item.pricePerUnit)} ={" "}
+                    {formatCurrency(item.totalAmount)}
+                  </Typography>
+                </Box>
+              ))}
 
+              <Divider sx={{ my: 2 }} />
+              <Typography fontWeight="bold">
+                Total Product Sales: {formatCurrency(sales.totalProductsSales)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      {/* AGO SECTION */}
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">
-          AGO Details
-        </h2>
+        {/* ================= OTHER INCOME ================= */}
+        <Grid item xs={12}>
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Other Income
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl">
-          <div>
-            <p className="text-xs text-gray-400">Opening</p>
-            <p>{sales.AGO?.openingMeter}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400">Closing</p>
-            <p>{sales.AGO?.closingMeter}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400">Price/Litre</p>
-            <p>₦{sales.AGO?.pricePerLitre}</p>
-          </div>
-        </div>
-      </div>
+              {sales.otherIncome.map((item, index) => (
+                <Typography key={index}>
+                  {item.itemName}: {formatCurrency(item.amount)}
+                </Typography>
+              ))}
 
+              <Divider sx={{ my: 2 }} />
+              <Typography fontWeight="bold">
+                Total Other Income: {formatCurrency(sales.totalOtherIncome)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      {/* PRODUCTS SOLD */}
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Products Sold
-        </h2>
+        {/* ================= GRAND SUMMARY ================= */}
+        <Grid item xs={12}>
+          <Card elevation={5}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Financial Summary
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
 
-        {sales.productsSold?.map((item, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-xl"
-          >
-            <div>{item.itemName}</div>
-            <div>{item.quantitySold}</div>
-            <div>₦{item.pricePerUnit}</div>
-          </div>
-        ))}
-      </div>
+              <Typography>Total Sales Amount: {formatCurrency(sales.totalSalesAmount)}</Typography>
+              <Typography>Total Expenses: {formatCurrency(sales.totalExpenses)}</Typography>
+              <Typography variant="h6" fontWeight="bold" mt={2}>
+                Net Sales: {formatCurrency(sales.netSales)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
+        {/* ================= AUDIT INFO ================= */}
+        <Grid item xs={12}>
+          <Card elevation={2}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Audit Information
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
 
-      {/* OTHER INCOME */}
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Other Income
-        </h2>
+              <Typography>
+                Created By: {sales.createdBy?.name}
+              </Typography>
 
-        {sales.otherIncome?.map((item, index) => (
-          <div
-            key={index}
-            className="flex justify-between bg-gray-50 p-4 rounded-xl"
-          >
-            <span>{item.itemName}</span>
-            <span>₦{item.amount}</span>
-          </div>
-        ))}
-      </div>
+              {sales.submittedBy && (
+                <Typography>
+                  Submitted By: {sales.submittedBy?.name}
+                </Typography>
+              )}
 
+              {sales.approvedBy && (
+                <Typography>
+                  Approved By: {sales.approvedBy?.name}
+                </Typography>
+              )}
 
-      {/* AUDIT TRAIL */}
-      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-2">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Audit Information
-        </h2>
+              {sales.updateReason && (
+                <Typography>
+                  Update Reason: {sales.updateReason}
+                </Typography>
+              )}
 
-        <p className="text-sm text-gray-500">
-          Last Updated: {sales.updatedAt ? new Date(sales.updatedAt).toLocaleString() : "N/A"}
-        </p>
+              {sales.isLocked && (
+                <Chip
+                  label="LOCKED"
+                  color="error"
+                  sx={{ mt: 2 }}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
 
-        {sales.updateReason && (
-          <p className="text-sm text-gray-500">
-            Update Reason: {sales.updateReason}
-          </p>
-        )}
-      </div>
-
-    </div>
+      </Grid>
+    </Box>
   );
 }
