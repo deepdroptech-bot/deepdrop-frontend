@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../../api";
+import { dailySalesAPI } from "../../../services/dailySalesService";
 import {
   Card,
   CardContent,
@@ -23,7 +23,7 @@ export default function ViewDailySales() {
 
   const fetchSales = async () => {
     try {
-      const res = await api.get(`/daily-sales/${id}`);
+      const res = await dailySalesAPI.get(`/daily-sales/${id}`);
       setSales(res.data.sales);
     } catch (err) {
       console.error(err);
