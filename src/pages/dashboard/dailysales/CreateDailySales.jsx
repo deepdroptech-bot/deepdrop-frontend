@@ -255,6 +255,27 @@ export default function CreateDailySales() {
             required
           />
 
+          {form.PMS.expenses.map((expense, index) => (
+            <div key={index} className="flex gap-4">
+              <input
+                placeholder="Expense Description"
+                className="input-premium flex-1"
+                value={expense.description}
+                onChange={e =>
+                  handleNestedExpenseChange("PMS", index, "description", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                placeholder="Expense Amount"
+                className="input-premium"
+                value={expense.amount}
+                onChange={e =>
+                  handleNestedExpenseChange("PMS", index, "amount", e.target.value)
+                }
+              />
+            </div>
+          ))}
           <button type="button" onClick={() => addExpense("PMS")} className="btn-secondary">
             + Add PMS Expense
           </button>
@@ -291,6 +312,28 @@ export default function CreateDailySales() {
               handleSectionChange("AGO", "pricePerLitre", e.target.value)
             }
           />
+
+          {form.AGO.expenses.map((expense, index) => (
+            <div key={index} className="flex gap-4">
+              <input
+                placeholder="Expense Description"
+                className="input-premium flex-1"
+                value={expense.description}
+                onChange={e =>
+                  handleNestedExpenseChange("AGO", index, "description", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                placeholder="Expense Amount"
+                className="input-premium"
+                value={expense.amount}
+                onChange={e =>
+                  handleNestedExpenseChange("AGO", index, "amount", e.target.value)
+                }
+              />
+            </div>
+          ))}
 
           <button type="button" onClick={() => addExpense("AGO")} className="btn-secondary">
             + Add AGO Expense

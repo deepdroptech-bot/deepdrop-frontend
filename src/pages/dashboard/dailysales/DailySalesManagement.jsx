@@ -5,44 +5,48 @@ import { dailySalesAPI } from "../../../services/dailySalesService";
 export default function DailySalesManagement() {
   const [sales, setSales] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
-  const navigate = useNavigate();
+  const [searchDate, setSearchDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchSales = async () => {
-  const params = {
-    page: 1,
-    limit: 20
+    try {
+      const params = {
+        page: 1,
+        limit: 20
+      };
+
+      if (activeTab !== "all") {
+        params.approvalStatus = activeTab;
+      }
+
+      if (searchDate) {
+        params.salesDate = searchDate;
+      }
+
+      const res = await dailySalesAPI.getAll(params);
+      setSales(res.data.salesRecords);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  if (activeTab !== "all") {
-    params.approvalStatus = activeTab;
-  }
-
-  const res = await dailySalesAPI.getAll(params);
-
-  setSales(res.data.salesRecords);
-};
-
   useEffect(() => {
-    // Simulate loading time for better UX
     setLoading(true);
-    const timer = setTimeout(() => {
-      fetchSales().finally(() => setLoading(false));
-    }, 1000);
-    fetchSales();
-  }, [activeTab]);
+    fetchSales().finally(() => setLoading(false));
+  }, [activeTab, searchDate]);
 
   const handleSubmit = async (id) => {
     if (!window.confirm("Submit this daily sales?")) return;
-
     await dailySalesAPI.submit(id);
     fetchSales();
   };
 
-  const filteredSales =
-    activeTab === "all"
-      ? sales
-      : sales.filter(s => s.approvalStatus === activeTab);
+  const handleApprove = async (id) => {
+    if (!window.confirm("Approve this submitted sales?")) return;
+    await dailySalesAPI.approve(id);
+    fetchSales();
+  };
 
   const getStatusBadge = (status) => {
     if (status === "draft")
@@ -54,37 +58,60 @@ export default function DailySalesManagement() {
   };
 
   if (loading)
-  return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
-        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-red-500 to-blue-600 flex items-center justify-center animate-pulse">
-          <span className="text-white text-2xl font-black">⏳</span>
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-red-500 to-blue-600 flex items-center justify-center animate-pulse">
+            <span className="text-white text-2xl font-black">⏳</span>
+          </div>
+          <h2 className="text-2xl font-extrabold text-gray-800 mb-2">
+            Loading Daily Sales Records
+          </h2>
+          <p className="text-gray-500 text-base">
+            Please wait while we fetch daily sales records
+          </p>
         </div>
-        <h2 className="text-2xl font-extrabold text-gray-800 mb-2">
-          Loading Daily Sales Records
-        </h2>
-        <p className="text-gray-500 text-base">
-          Please wait while we fetch daily sales records
-        </p>
       </div>
-    </div>
-  );
+    );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-8">
 
-      <h2 className="text-2xl font-bold">Daily Sales Management</h2>
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">
+            Daily Sales Management
+          </h2>
+          <p className="text-gray-500 text-sm mt-1">
+            Manage, submit and approve daily sales records
+          </p>
+        </div>
 
-      <div className="flex justify-between items-center mb-6">
-  <h2 className="text-xl font-bold">Daily Sales Management</h2>
-  <button
-    className="btn-primary"
-    onClick={() => navigate("/dashboard/daily-sales/new")}
-  >
-    + Create Daily Sales
-  </button>
-</div>
+        <button
+          className="btn-primary"
+          onClick={() => navigate("/dashboard/daily-sales/new")}
+        >
+          + Create Daily Sales
+        </button>
+      </div>
 
+      {/* DATE SEARCH */}
+      <div className="card-premium flex items-center gap-4">
+        <input
+          type="date"
+          value={searchDate}
+          onChange={(e) => setSearchDate(e.target.value)}
+          className="input-primary"
+        />
+
+        <button
+          onClick={() => setSearchDate("")}
+          className="btn-outline"
+        >
+          Reset
+        </button>
+      </div>
 
       {/* TABS */}
       <div className="flex gap-4 border-b pb-3">
@@ -103,12 +130,13 @@ export default function DailySalesManagement() {
         ))}
       </div>
 
-      {/* LIST */}
-      {filteredSales.length === 0 && (
-        <p>No records found.</p>
+      {/* EMPTY STATE */}
+      {sales.length === 0 && (
+        <p className="text-gray-500">No records found.</p>
       )}
 
-      {filteredSales.map(sale => (
+      {/* SALES LIST */}
+      {sales.map(sale => (
         <div
           key={sale._id}
           className="card-premium flex justify-between items-center"
@@ -160,9 +188,19 @@ export default function DailySalesManagement() {
               </>
             )}
 
+            {sale.approvalStatus === "submitted" && (
+              <button
+                onClick={() => handleApprove(sale._id)}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                Approve
+              </button>
+            )}
+
           </div>
         </div>
       ))}
+
     </div>
   );
 }
