@@ -29,6 +29,9 @@ import ViewDailySales from "./pages/dashboard/dailysales/ViewDailySales";
 // Inventory Management pages
 import InventoryManagement from "./pages/dashboard/inventory/InventoryManagement";
 
+// Bank Management pages
+import BankManagement from "./pages/dashboard/bank/BankManagement";
+
 // import { useEffect, useState } from "react";
 
 // import { useState, useEffect } from "react";
@@ -90,6 +93,9 @@ function App() {
 
     {/* Inventory management routes */}
     <Route path="inventory" element={<InventoryManagement />} />
+
+    {/* Bank management routes */}
+    <Route path="bank" element={<BankManagement />} />
 
   </Route>
 </Route>
