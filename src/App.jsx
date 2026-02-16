@@ -26,6 +26,9 @@ import EditDailySales from "./pages/dashboard/dailysales/EditDailySales";
 import CCreateDailySales from "./pages/dashboard/dailysales/CreateDailySales";
 import ViewDailySales from "./pages/dashboard/dailysales/ViewDailySales";
 
+// Inventory Management pages
+import InventoryManagement from "./pages/dashboard/inventory/InventoryManagement";
+
 // import { useEffect, useState } from "react";
 
 // import { useState, useEffect } from "react";
@@ -84,6 +87,9 @@ function App() {
     <Route path="daily-sales/:id/edit" element={<EditDailySales />} />
     <Route path="daily-sales/new" element={<CCreateDailySales />} />
     <Route path="daily-sales/:id" element={<ViewDailySales />} />
+
+    {/* Inventory management routes */}
+    <Route path="inventory" element={<InventoryManagement />} />
 
   </Route>
 </Route>
