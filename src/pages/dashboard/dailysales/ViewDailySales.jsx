@@ -23,7 +23,7 @@ export default function ViewDailySales() {
 
   const fetchSales = async () => {
     try {
-      const res = await dailySalesAPI.get(`/daily-sales/${id}`);
+      const res = await dailySalesAPI.getById(`/daily-sales/${id}`);
       setSales(res.data.sales);
     } catch (err) {
       console.error(err);
