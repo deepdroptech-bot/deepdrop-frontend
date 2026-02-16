@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { bankAPI } from "../../services/bankService";
+import { bankAPI } from "../../../services/bankService";
 
 export default function BankManagement() {
   const [bank, setBank] = useState(null);
