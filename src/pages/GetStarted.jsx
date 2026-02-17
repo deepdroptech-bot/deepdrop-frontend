@@ -17,7 +17,7 @@ export default function GetStartedPage() {
     {
       name: "Agbor RD Branch",
       image:
-        "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
+        "https://unsplash.com/photos/8zcthkLGE6U",
       link: "/login/agbor-rd",
       icon: <Building className="w-6 h-6 text-white" />,
       color: "bg-red-500",
@@ -26,7 +26,7 @@ export default function GetStartedPage() {
     {
       name: "Ekiosa Branch",
       image:
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+        "https://unsplash.com/photos/OJruGZUQAiQ",
       link: "/login/ekiosa",
       icon: <User className="w-6 h-6 text-white" />,
       color: "bg-blue-500",

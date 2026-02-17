@@ -40,11 +40,9 @@ export default function Home() {
           playsInline
           className="w-full h-full object-cover"
         >
-          <source
-            src="https://youtube.com/shorts/_QiVoaqI4Lk?si=7H9FP9t_8atPV-Ii"
-            type="video/mp4"
-          />
+          <source src="/videos/background.mp4" type="video/mp4" />
         </video>
+
         {/* Overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-blue-600 to-white/30 backdrop-blur-[2px]" />
       </div>
@@ -101,7 +99,7 @@ export default function Home() {
                   variants={itemVariants}
                   className="text-6xl md:text-8xl font-black text-white mb-8 drop-shadow-lg leading-tight"
                 >
-                  DEEPDROP1
+                  DEEPDROP
                   <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-white to-blue-400">
                     ENERGY LIMITED

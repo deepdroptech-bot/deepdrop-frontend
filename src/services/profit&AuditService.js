@@ -8,6 +8,6 @@ export const profitAuditAPI = {
   getSummary: (from, to) =>
     API.get(`/profit-audit/profit-summary?from=${from}&to=${to}`),
 
-  getAuditTrail: (id) =>
-    API.get(`/profit-audit/audit-trail/${id}`),
+  getAuditTrail: (date) =>
+    API.get(`/profit-audit/audit-trail/${date}`),
 };

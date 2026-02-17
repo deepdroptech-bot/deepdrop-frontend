@@ -12,7 +12,7 @@ export default function ProfitAuditManagement() {
   const [to, setTo] = useState("");
   const [summary, setSummary] = useState(null);
 
-  const [auditId, setAuditId] = useState("");
+  const [auditdate, setAuditDate] = useState("");
   const [auditData, setAuditData] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function ProfitAuditManagement() {
 
   const fetchSummary = async () => {
     try {
-      const res = await auditAPI.getSummary(from, to);
+      const res = await profitAuditAPI.getSummary(from, to);
       setSummary(res.data);
     } catch (err) {
       alert("Failed to generate summary");
@@ -48,7 +48,7 @@ export default function ProfitAuditManagement() {
 
   const fetchAuditTrail = async () => {
     try {
-      const res = await auditAPI.getAuditTrail(auditId);
+      const res = await profitAuditAPI.getAuditTrail(auditdate);
       setAuditData(res.data);
     } catch (err) {
       alert("Sales record not found");
@@ -209,11 +209,11 @@ export default function ProfitAuditManagement() {
 
           <div className="flex gap-4">
             <input
-              type="text"
-              placeholder="Enter Sales Record ID"
+              type="date"
+              placeholder="Enter Sales Date (YYYY-MM-DD)"
               className="border p-3 rounded-xl w-full"
-              value={auditId}
-              onChange={(e) => setAuditId(e.target.value)}
+              value={auditdate}
+              onChange={(e) => setAuditDate(e.target.value)}
             />
             <button
               onClick={fetchAuditTrail}
