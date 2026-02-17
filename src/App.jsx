@@ -42,7 +42,7 @@ import PMSPLManagement from "./pages/dashboard/pmspl/PmsPlManagement";
 import ExpenseManagement from "./pages/dashboard/expense/ExpenseManagement";
 
 // profit and audit management page
-import ProfitAuditManagement from "./pages/dashboard/profit&audit/ProfitAuditManagement";
+import ProfitAuditManagement from "./pages/dashboard/profit&audit/Profit&AuditManagement";
 
 import { useState, useEffect } from "react";
 import Loader from "./components/Loader";
