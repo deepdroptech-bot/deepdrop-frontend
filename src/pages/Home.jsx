@@ -101,7 +101,7 @@ export default function Home() {
                   variants={itemVariants}
                   className="text-6xl md:text-8xl font-black text-white mb-8 drop-shadow-lg leading-tight"
                 >
-                  DEEPDROP
+                  DEEPDROP1
                   <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-white to-blue-400">
                     ENERGY LIMITED
