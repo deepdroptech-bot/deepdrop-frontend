@@ -44,8 +44,6 @@ import ExpenseManagement from "./pages/dashboard/expenses/ExpenseManagement";
 // profit and loss management page
 import ProfitLossManagement from "./pages/dashboard/profitloss/ProfitLossManagement";
 
-import { useEffect, useState } from "react";
-
 import { useState, useEffect } from "react";
 import Loader from "./components/Loader";
 
