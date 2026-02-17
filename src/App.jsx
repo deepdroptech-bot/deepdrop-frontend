@@ -39,10 +39,10 @@ import RetainedEarningsPage from "./pages/dashboard/retainedearnings/RetainedEar
 import PMSPLManagement from "./pages/dashboard/pmspl/PmsPlManagement";
 
 // expense management page
-import ExpenseManagement from "./pages/dashboard/expenses/ExpenseManagement";
+import ExpenseManagement from "./pages/dashboard/expense/ExpenseManagement";
 
-// profit and loss management page
-import ProfitLossManagement from "./pages/dashboard/profitloss/ProfitLossManagement";
+// profit and audit management page
+import ProfitAuditManagement from "./pages/dashboard/profit&audit/ProfitAuditManagement";
 
 import { useState, useEffect } from "react";
 import Loader from "./components/Loader";
@@ -116,8 +116,8 @@ function App() {
     {/* Expense management route */}
     <Route path="expenses" element={<ExpenseManagement />} />
 
-    {/* Profit and loss management route */}
-    <Route path="profit-loss" element={<ProfitLossManagement />} />
+    {/* Profit and audit management route */}
+    <Route path="profit-audit" element={<ProfitAuditManagement />} />
 
   </Route>
 </Route>
