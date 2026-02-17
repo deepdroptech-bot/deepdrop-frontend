@@ -36,7 +36,7 @@ import BankManagement from "./pages/dashboard/bank/BankManagement";
 import RetainedEarningsPage from "./pages/dashboard/retainedearnings/RetainedEarningsManagemen";
 
 // PMSPL Management page
-import PMSPLManagement from "./pages/dashboard/pmspl/PmsPlManagement";
+import PMSPLManagement from "./pages/dashboard/pmspl/PMSPLManagement";
 
 // expense management page
 import ExpenseManagement from "./pages/dashboard/expense/ExpenseManagement";
