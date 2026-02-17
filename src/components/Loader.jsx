@@ -1,48 +1,44 @@
-import logo from '../assets/logo.png';
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Sparkles, Zap } from "lucide-react";
+import  { useState, useEffect } from "react";
 
 export default function Loader() {
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div
-      className="
-        fixed inset-0 z-50
-        flex items-center justify-center
-        bg-gradient-to-r from-red-600 via-blue-600 to-red-600
-        bg-[length:300%_300%]
-        animate-gradientMove
-      "
-    >
-      <div className="flex flex-col items-center gap-6">
 
-        {/* Logo wrapper */}
-        <div className="relative">
-          <img
-            src={logo}
-            alt="Logo"
-            className="
-              w-28 h-28
-              animate-bounceSoft
-              animate-glow
-              animate-gradientMove
-            "  
-          />
-
-          {/* rotating ring */}
-          <div
-            className="
-              absolute inset-0
-              rounded-full
-              border-4 border-white/40
-              animate-spinSlow
-            "
-          />
-        </div>
-
-        {/* Text */}
-        <p className="text-white text-lg font-semibold tracking-widest uppercase">
-          Loading your experience…
-        </p>
-
-      </div>
-    </div>
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute inset-0 flex items-center justify-center z-10 bg-gradient-to-br from-red-500 via-blue-500 to-white"
+          >
+            <motion.div
+              animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="bg-gradient-to-tr from-red-500 to-blue-600 p-8 rounded-3xl shadow-2xl"
+            >
+              <Zap className="text-white w-20 h-20" fill="currentColor" />
+            </motion.div>
+            <motion.h2
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
+                          className="mt-6 text-2xl font-black text-white"
+                        >
+                          {"Loading Your Page..."}
+                        </motion.h2>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
   );
 }

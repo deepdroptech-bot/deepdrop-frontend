@@ -5,6 +5,7 @@ import { BouncyButton } from "../../components/BouncyButton"
 import { motion } from "framer-motion"
 import { useAuth } from "../../context/AuthContext"
 
+
 export default function ProfilePage() {
   const [form, setForm] = useState({
     name: "",
@@ -14,6 +15,8 @@ export default function ProfilePage() {
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
+
+  const { logout } = useAuth();
 
   useEffect(() => {
     api.get("/auth/me").then(res => {
@@ -32,6 +35,10 @@ export default function ProfilePage() {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
+
+  const handleLogout = () => {
+    logout();
+  }
 
     try {
       await api.put("/auth/me", form)
@@ -93,10 +100,14 @@ function Input({ label, ...props }) {
         {...props}
         className="w-full px-4 py-3 rounded-xl border-2 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none"
       />
+
+      <button onClick={handleLogout} className="mt-4 text-red-600 font-semibold hover:underline">
+        Logout
+      </button>
     </div>
   )
 }
 
-// const { logout } = useAuth();
+// 
 
-// <button onClick={logout}>Logout</button>
+// 

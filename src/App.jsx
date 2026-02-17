@@ -32,27 +32,39 @@ import InventoryManagement from "./pages/dashboard/inventory/InventoryManagement
 // Bank Management pages
 import BankManagement from "./pages/dashboard/bank/BankManagement";
 
-// import { useEffect, useState } from "react";
+// Retained Earnings Management page
+import RetainedEarningsPage from "./pages/dashboard/retainedearnings/RetainedEarningsManagemen";
 
-// import { useState, useEffect } from "react";
-// import Loader from "./components/Loader";
+// PMSPL Management page
+import PMSPLManagement from "./pages/dashboard/pmspl/PmsPlManagement";
+
+// expense management page
+import ExpenseManagement from "./pages/dashboard/expenses/ExpenseManagement";
+
+// profit and loss management page
+import ProfitLossManagement from "./pages/dashboard/profitloss/ProfitLossManagement";
+
+import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
+import Loader from "./components/Loader";
 
 import Test from "./pages/Test";
 
 function App() {
   
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   // simulate app boot / API check
-  //   const timer = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 2000);
+  useEffect(() => {
+    // simulate app boot / API check
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
-  // if (loading) return <Loader />;
+  if (loading) return <Loader />;
 
 
   return (
@@ -96,6 +108,18 @@ function App() {
 
     {/* Bank management routes */}
     <Route path="bank" element={<BankManagement />} />
+
+    {/* Retained earnings management route */}
+    <Route path="retained-earnings" element={<RetainedEarningsPage />} />
+
+    {/* PMSPL management route */}
+    <Route path="pmspl" element={<PMSPLManagement />} />
+
+    {/* Expense management route */}
+    <Route path="expenses" element={<ExpenseManagement />} />
+
+    {/* Profit and loss management route */}
+    <Route path="profit-loss" element={<ProfitLossManagement />} />
 
   </Route>
 </Route>
