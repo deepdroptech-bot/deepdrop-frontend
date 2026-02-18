@@ -4,7 +4,6 @@ import Overview from "./DashboardOverview";
 import { dashboardAPI } from "../../services/dashboardService";
 import {Outlet} from "react-router-dom";
 
-import DashboardLayout from "../../components/layout/DashboardLayout";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
