@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Overview from "./DashboardOverview";
-import { getDashboardOverview } from "../../services/dashboardService";
+import { dashboardAPI } from "../../services/dashboardService";
 import {Outlet} from "react-router-dom";
+
+import DashboardLayout from "../../components/layout/DashboardLayout";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -17,7 +19,7 @@ export default function Dashboard() {
 
   const loadDashboard = async () => {
     try {
-      const data = await getDashboardOverview();
+      const data = await dashboardAPI.getOverview();
       setDashboardData(data);
     } catch (error) {
       console.error("Dashboard load failed:", error);
