@@ -1,4 +1,5 @@
 import ChartCard from "../../components/dashboard/ChartCard";
+import { motion } from "framer-motion";
 
 import {
   ResponsiveContainer,
