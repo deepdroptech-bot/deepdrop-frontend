@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { dashboardAPI } from "../../services/dashboardService";
-
-import Overview from "./DashboardOverview";
-
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -20,15 +18,14 @@ export default function Dashboard() {
     }
   };
 
-    useEffect(() => {
-  loadDashboard();
-  const interval = setInterval(loadDashboard, 60000);
-  return () => clearInterval(interval);
-}, []);
+  useEffect(() => {
+    loadDashboard();
+    const interval = setInterval(loadDashboard, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <DashboardLayout>
-
       {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-blue-800">
@@ -51,12 +48,17 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Dashboard Content */}
+      {/* Error State */}
       {!loading && !dashboardData && (
-  <div className="text-red-500">
-    Failed to load dashboard data
-  </div>
-)}      
+        <div className="text-red-500">
+          Failed to load dashboard data
+        </div>
+      )}
+
+      {/* Nested Routes Render Here */}
+      {!loading && dashboardData && (
+        <Outlet context={{ dashboardData }} />
+      )}
     </DashboardLayout>
   );
 }

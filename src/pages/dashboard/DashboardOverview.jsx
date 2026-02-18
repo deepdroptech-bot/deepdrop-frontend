@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ExecutiveDashboard from "./ExecutiveDashboard";
 import OperationalDashboard from "./OperationalDashboard";
 
 import { useOutletContext } from "react-router-dom";
-
-
 import StockAlert from "../../components/dashboard/StockAlert";
 
 export default function Overview() {
