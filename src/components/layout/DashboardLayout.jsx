@@ -1,6 +1,5 @@
 import Sidebar from "./Sidebar";
 import MobileNav from "./MobileNav";
-import { Outlet } from 'react-router-dom'
 
 export default function DashboardLayout({ children }) {
   return (
@@ -25,8 +24,6 @@ export default function DashboardLayout({ children }) {
       </div>
 
       <MobileNav />
-
-      <Outlet />
     </div>
   );
 }
