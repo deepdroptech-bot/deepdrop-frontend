@@ -4,7 +4,7 @@ import { ArrowLeft, Zap, User, Building } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import ekiosa from "../assets/ekiosa.jpeg";
-import agbor from "../assets/agbor.jpeg";
+import agbor from "../assets/agbor-rd.jpeg";
 
 export default function GetStartedPage() {
   const [isLoading, setIsLoading] = useState(true);
