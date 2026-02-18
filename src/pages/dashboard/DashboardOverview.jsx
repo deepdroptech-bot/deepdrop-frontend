@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import ExecutiveDashboard from "./ExecutiveDashboard";
 import OperationalDashboard from "./OperationalDashboard";
 
+import { useOutletContext } from "react-router-dom";
+
+
 import StockAlert from "../../components/dashboard/StockAlert";
 
-export default function Overview(data) {
+export default function Overview() {
+  const { dashboardData } = useOutletContext();
   const [view, setView] = useState("executive");
 
-  useEffect(() => {
-    
-  }, []);
-
-  if (!data) return <div className="p-6">Loading Dashboard...</div>;
+  if (!dashboardData) {
+    return <div className="p-6">Loading Dashboard...</div>;
+  }
 
   return (
     <div className="space-y-8">
@@ -42,18 +44,18 @@ export default function Overview(data) {
       </div>
 
       {/* Animated Alerts */}
-      {data.alerts?.length > 0 && (
+      {dashboardData.alerts?.length > 0 && (
         <div className="space-y-3">
-          {data.alerts.map((alert, i) => (
+          {dashboardData.alerts.map((alert, i) => (
             <StockAlert key={i} message={alert.message} />
           ))}
         </div>
       )}
 
       {view === "executive" ? (
-        <ExecutiveDashboard data={data} />
+        <ExecutiveDashboard data={dashboardData} />
       ) : (
-        <OperationalDashboard data={data} />
+        <OperationalDashboard data={dashboardData} />
       )}
     </div>
   );

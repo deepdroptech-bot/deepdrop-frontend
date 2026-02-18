@@ -5,6 +5,10 @@ import Login from "./pages/Login"
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardSummary from "./pages/dashboard/DashboardSummary";
+
+
+// Dashboard sub-pages
+import Overview from "./pages/dashboard/DashboardOverview";
 import Dashboard from "./pages/dashboard/Dashboard";
 
 //User management pages
@@ -80,7 +84,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
   <Route path="/dashboard" element={<Dashboard />}>
 
-    <Route index element={<Dashboard />} />
+    <Route index element={<Overview />} />
 
     {/* User management routes */}
     <Route path="myprofile" element={<ProfilePage />} />

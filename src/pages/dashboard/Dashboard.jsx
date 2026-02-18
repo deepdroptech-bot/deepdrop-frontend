@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import Overview from "./DashboardOverview";
 import { dashboardAPI } from "../../services/dashboardService";
-import {Outlet} from "react-router-dom";
+
+import Overview from "./DashboardOverview";
 
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-  loadDashboard();
-  const interval = setInterval(loadDashboard, 60000);
-  return () => clearInterval(interval);
-}, []);
-
 
   const loadDashboard = async () => {
     try {
@@ -26,6 +19,12 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
+
+    useEffect(() => {
+  loadDashboard();
+  const interval = setInterval(loadDashboard, 60000);
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <DashboardLayout>
@@ -53,12 +52,11 @@ export default function Dashboard() {
       )}
 
       {/* Dashboard Content */}
-      {!loading && dashboardData && (
-        <Overview data={dashboardData} />
-      )}
-
-        {/* Nested Routes */}
-        <Outlet />
+      {!loading && !dashboardData && (
+  <div className="text-red-500">
+    Failed to load dashboard data
+  </div>
+)}      
     </DashboardLayout>
   );
 }
