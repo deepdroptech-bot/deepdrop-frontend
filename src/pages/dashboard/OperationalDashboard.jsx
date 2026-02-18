@@ -1,3 +1,5 @@
+import ChartCard from "../../components/dashboard/ChartCard";
+
 import {
   ResponsiveContainer,
   AreaChart,

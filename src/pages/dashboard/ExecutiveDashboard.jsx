@@ -1,3 +1,7 @@
+import KpiCard from "../../components/dashboard/KpiCard";
+import ChartCard from "../../components/dashboard/ChartCard";
+
+
 import {
   ResponsiveContainer,
   AreaChart,
