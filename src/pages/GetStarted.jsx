@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Zap, User, Building } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import logo from "../assets/logo.png";
+
 import ekiosa from "../assets/ekiosa.jpeg";
 import agbor from "../assets/agbor-rd.jpeg";
 
@@ -64,7 +66,13 @@ export default function GetStartedPage() {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="bg-gradient-to-tr from-red-500 to-blue-600 p-6 rounded-3xl shadow-2xl"
             >
-              <Zap className="text-white w-16 h-16" fill="currentColor" />
+              <img src={logo} alt="Deepdrop Logo" className="w-20 h-20 mb-4" />
+              <h2 className="text-2xl font-extrabold text-white mb-2">
+                Loading Deepdrop Experience...
+              </h2>
+              <p className="text-gray-200 text-base">
+                Please wait while we prepare the energy and tech magic
+              </p>
             </motion.div>
           </motion.div>
         ) : (

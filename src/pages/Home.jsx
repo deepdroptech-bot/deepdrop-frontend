@@ -4,6 +4,8 @@ import { ArrowRight, Sparkles, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BouncyButton } from "../components/BouncyButton";
 
+import logo from "../assets/logo.png";
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,7 +50,7 @@ export default function Home() {
       </div>
 
       <AnimatePresence mode="wait">
-        {/* {isLoading ? (
+        {isLoading ? (
           <motion.div
             key="loading"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -61,10 +63,16 @@ export default function Home() {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="bg-gradient-to-tr from-red-500 to-blue-600 p-8 rounded-3xl shadow-2xl"
             >
-              <Zap className="text-white w-20 h-20" fill="currentColor" />
+              <img src={logo} alt="Deepdrop Logo" className="w-24 h-24 mb-4" />
+              <h2 className="text-2xl font-extrabold text-white mb-2">
+                Loading Deepdrop Experience...
+              </h2>
+              <p className="text-gray-200 text-base">
+                Please wait while we prepare the energy and tech magic
+              </p>
             </motion.div>
-          </motion.div> */}
-        {/* ) : ( */}
+          </motion.div> 
+         ) : (
           <>
             {/* Navigation */}
             {/* <nav className="w-full p-6 flex justify-between items-center max-w-7xl mx-auto relative z-10">
@@ -123,7 +131,7 @@ export default function Home() {
               </motion.div>
             </main>
           </>
-        {/* )} */}
+        )} 
       </AnimatePresence>
     </div>
   );

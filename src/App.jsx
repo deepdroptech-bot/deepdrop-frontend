@@ -44,25 +44,25 @@ import ExpenseManagement from "./pages/dashboard/expense/ExpenseManagement";
 // profit and audit management page
 import ProfitAuditManagement from "./pages/dashboard/profit&audit/Profit&AuditManagement";
 
-import { useState, useEffect } from "react";
-import Loader from "./components/Loader";
+// import { useState, useEffect } from "react";
+// import Loader from "./components/Loader";
 
 import Test from "./pages/Test";
 
 function App() {
   
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // simulate app boot / API check
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+  // useEffect(() => {
+  //   // simulate app boot / API check
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
 
   return (

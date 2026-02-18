@@ -4,8 +4,8 @@ import { Mail, Lock, User, ArrowLeft, Zap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { BouncyButton } from "../components/BouncyButton";
 import { useAuth } from "../context/AuthContext";
-import ekiosa from "../assets/ekiosa.jpeg";
-import agbor from "../assets/agbor-rd.jpeg";
+
+import logo from "../assets/logo.png";
 
 export default function Login({ branchName }) {
   const navigate = useNavigate();
@@ -71,16 +71,14 @@ useEffect(() => {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="bg-gradient-to-tr from-red-500 to-blue-600 p-6 rounded-3xl shadow-2xl"
             >
-              <Zap className="text-white w-16 h-16" fill="currentColor" />
+              <img src={logo} alt="Deepdrop Logo" className="w-20 h-20 mb-4" />
+              <h2 className="text-2xl font-extrabold text-white mb-2">
+                Loading Deepdrop Experience...
+              </h2>
+              <p className="text-gray-200 text-base">
+                Please wait while we prepare the energy and tech magic
+              </p>
             </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-6 text-2xl font-black text-white"
-            >
-              {branchName || "Input Login..."}
-            </motion.h2>
           </motion.div>
         ) : (
           <motion.div

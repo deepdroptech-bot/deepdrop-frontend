@@ -26,7 +26,7 @@ export default function ProfitAuditManagement() {
     try {
       const res = await profitAuditAPI.getDailyReport(dailyDate);
       setDailyReport(res.data);
-      setLoading(false);
+      setLoading(true);
     } catch (err) {
       alert("No approved sales found for this date");
       setDailyReport(null);
@@ -177,13 +177,21 @@ export default function ProfitAuditManagement() {
 
               <div className="bg-blue-50 p-6 rounded-2xl">
                 <h3 className="font-bold">PMS Net</h3>
+
+                // We can also show lites, revenue and expenses with color here if needed
+                <p className="text-sm text-gray-500">
+                  {summary.PMS.litres} litres | Revenue: {formatCurrency(summary.PMS.revenue)} | Expenses: {formatCurrency(summary.PMS.expenses)}
+                </p>
                 <p className="text-xl font-bold text-green-600">
-                  {formatCurrency(summary.PMS.netProfit)}
+                  {formatCurrency(summary.PMS.netProfit)} Net Profit
                 </p>
               </div>
 
               <div className="bg-green-50 p-6 rounded-2xl">
                 <h3 className="font-bold">AGO Net</h3>
+                <p className="text-sm text-gray-500">
+                  {summary.AGO.litres} litres | Revenue: {formatCurrency(summary.AGO.revenue)} | Expenses: {formatCurrency(summary.AGO.expenses)}
+                </p>
                 <p className="text-xl font-bold text-green-600">
                   {formatCurrency(summary.AGO.netProfit)}
                 </p>
