@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import Overview from "./Overview";
+import Overview from "./DashboardOverview";
 import { getDashboardOverview } from "../../services/dashboardService";
 import {Outlet} from "react-router-dom";
 

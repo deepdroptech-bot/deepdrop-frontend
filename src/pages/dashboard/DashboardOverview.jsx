@@ -10,7 +10,7 @@ export default function Overview(data) {
   const [data, setData] = useState(null);
   const [view, setView] = useState("executive");
 
-  useEffect((data) => {
+  useEffect(() => {
     
   }, []);
 
