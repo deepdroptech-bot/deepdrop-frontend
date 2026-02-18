@@ -1,5 +1,6 @@
 import ChartCard from "../../components/dashboard/ChartCard";
 import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
 
 import {
   ResponsiveContainer,
@@ -18,17 +19,21 @@ import {
   Cell
 } from "recharts";
 
-export default function OperationalDashboard({ data }) {
+export default function OperationalDashboard() {
+  const { dashboardData } = useOutletContext();
+
+  const inventory = dashboardData?.inventory || {};
+  const lowProducts = dashboardData?.lowProducts || [];
+
   const pieData = [
-    { name: "PMS", value: data.inventory.pms },
-    { name: "AGO", value: data.inventory.ago }
+    { name: "PMS", value: inventory.pms || 0 },
+    { name: "AGO", value: inventory.ago || 0 }
   ];
 
   const COLORS = ["#1d4ed8", "#dc2626"];
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
-
       {/* Inventory Pie */}
       <ChartCard title="Inventory Distribution">
         <ResponsiveContainer width="100%" height={300}>
@@ -54,11 +59,11 @@ export default function OperationalDashboard({ data }) {
           Low Stock Products
         </h3>
 
-        {data.lowProducts?.length === 0 ? (
+        {lowProducts.length === 0 ? (
           <p className="text-gray-500">All products sufficiently stocked.</p>
         ) : (
           <ul className="space-y-2">
-            {data.lowProducts.map((product, i) => (
+            {lowProducts.map((product, i) => (
               <motion.li
                 key={i}
                 animate={{ x: [0, -5, 5, 0] }}
@@ -71,7 +76,6 @@ export default function OperationalDashboard({ data }) {
           </ul>
         )}
       </div>
-
     </div>
   );
 }
