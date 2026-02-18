@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { getDashboardOverview } from "../../services/dashboardService";
 import ExecutiveDashboard from "./ExecutiveDashboard";
 import OperationalDashboard from "./OperationalDashboard";
 
