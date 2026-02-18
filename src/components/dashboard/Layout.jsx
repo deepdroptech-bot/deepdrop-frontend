@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { Outlet } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
 
 export default function Layout({ title, children }) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { profitAuditAPI } from "../../../services/profit&AuditService";
 
 export default function ProfitAuditManagement() {
@@ -20,18 +20,25 @@ export default function ProfitAuditManagement() {
   const formatCurrency = (val) =>
     `₦${Number(val || 0).toLocaleString()}`;
 
+  useEffect(() => {
+    // Simulate loading time for better UX
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   /* ================= DAILY REPORT ================= */
 
   const fetchDailyReport = async () => {
     try {
       const res = await profitAuditAPI.getDailyReport(dailyDate);
       setDailyReport(res.data);
-      setLoading(true);
     } catch (err) {
       alert("No approved sales found for this date");
       setDailyReport(null);
     }
   };
+
 
   /* ================= SUMMARY REPORT ================= */
 

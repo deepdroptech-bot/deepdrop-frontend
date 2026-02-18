@@ -66,13 +66,8 @@ export default function GetStartedPage() {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="bg-gradient-to-tr from-red-500 to-blue-600 p-6 rounded-3xl shadow-2xl"
             >
-              <img src={logo} alt="Deepdrop Logo" className="w-20 h-20 mb-4" />
-              <h2 className="text-2xl font-extrabold text-white mb-2">
-                Loading Deepdrop Experience...
-              </h2>
-              <p className="text-gray-200 text-base">
-                Please wait while we prepare the energy and tech magic
-              </p>
+              <img src={logo} alt="Deepdrop Logo" className="w-24 h-24 mb-4" />
+             
             </motion.div>
           </motion.div>
         ) : (
