@@ -4,6 +4,8 @@ import { Mail, Lock, User, ArrowLeft, Zap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { BouncyButton } from "../components/BouncyButton";
 import { useAuth } from "../context/AuthContext";
+import ekiosa from "../assets/ekiosa.jpeg";
+import agbor from "../assets/agbor-rd.jpeg";
 
 export default function Login({ branchName }) {
   const navigate = useNavigate();

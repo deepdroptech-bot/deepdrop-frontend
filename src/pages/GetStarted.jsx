@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Zap, User, Building } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import ekiosa from "../assets/ekiosa.jpeg";
+import agbor from "../assets/agbor.jpeg";
+
 export default function GetStartedPage() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,8 +19,8 @@ export default function GetStartedPage() {
   const branches = [
     {
       name: "Agbor RD Branch",
-      image:
-        "https://unsplash.com/photos/8zcthkLGE6U",
+            image:
+              agbor,
       link: "/login/agbor-rd",
       icon: <Building className="w-6 h-6 text-white" />,
       color: "bg-red-500",
@@ -26,7 +29,7 @@ export default function GetStartedPage() {
     {
       name: "Ekiosa Branch",
       image:
-        "https://unsplash.com/photos/OJruGZUQAiQ",
+        ekiosa,
       link: "/login/ekiosa",
       icon: <User className="w-6 h-6 text-white" />,
       color: "bg-blue-500",

@@ -48,7 +48,7 @@ export default function Home() {
       </div>
 
       <AnimatePresence mode="wait">
-        {isLoading ? (
+        {/* {isLoading ? (
           <motion.div
             key="loading"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -63,8 +63,8 @@ export default function Home() {
             >
               <Zap className="text-white w-20 h-20" fill="currentColor" />
             </motion.div>
-          </motion.div>
-        ) : (
+          </motion.div> */}
+        {/* ) : ( */}
           <>
             {/* Navigation */}
             {/* <nav className="w-full p-6 flex justify-between items-center max-w-7xl mx-auto relative z-10">
@@ -123,7 +123,7 @@ export default function Home() {
               </motion.div>
             </main>
           </>
-        )}
+        {/* )} */}
       </AnimatePresence>
     </div>
   );
