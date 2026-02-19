@@ -6,7 +6,7 @@ export default function ProtectedRoute({ role }) {
 
   if (loading) return null;
 
-  if (!user) return <Navigate to="/login/ekiosa" replace />;
+  if (!user) return <Navigate to="/get-started" replace />;
 
   if (role && user.role !== role) {
     return <Navigate to="/unauthorized" replace />;
