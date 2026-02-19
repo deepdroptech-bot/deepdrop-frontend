@@ -11,7 +11,6 @@ export default function PMSPLManagement() {
   const [form, setForm] = useState({
     periodFrom: "",
     periodTo: "",
-    pmsNetSales: "",
     purchaseCost: "",
     cashAdjustments: 0
   });
@@ -213,11 +212,6 @@ export default function PMSPLManagement() {
             <input type="date" required
               className="border p-3 rounded-xl"
               onChange={(e)=>setForm({...form, periodTo: e.target.value})}
-            />
-
-            <input type="number" placeholder="PMS Net Sales" required
-              className="border p-3 rounded-xl"
-              onChange={(e)=>setForm({...form, pmsNetSales: e.target.value})}
             />
 
             <input type="number" placeholder="Purchase Cost" required
