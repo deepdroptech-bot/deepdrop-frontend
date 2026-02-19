@@ -17,7 +17,7 @@ export const navItems = [
   { name: "Staff", path: "staff", icon: Users },
   { name: "Bank", path: "bank", icon: Landmark },
   { name: "PMS", path: "inventory", icon: Fuel },
-  { name: "Products", path: "inventory/products", icon: Package },
+  { name: "Expenses", path: "expenses", icon: Package },
   { name: "P & L", path: "pmspl", icon: TrendingUp },
   { name: "Audit", path: "profit-audit", icon: ClipboardCheck },
   {name: "Retained Earnings", path: "retained-earnings", icon: TrendingUp} 

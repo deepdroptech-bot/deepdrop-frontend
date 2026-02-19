@@ -1,43 +1,69 @@
 import KpiCard from "../../components/dashboard/KpiCard";
 import ChartCard from "../../components/dashboard/ChartCard";
 
+import { useOutletContext } from "react-router-dom";
 
 import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   LineChart,
   Line,
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid,
-  PieChart,
-  Pie,
-  Cell
+  CartesianGrid
 } from "recharts";
 
-export default function ExecutiveDashboard({ data }) {
+export default function ExecutiveDashboard() {
+  const { dashboardData: data } = useOutletContext();
+
+
+  const monthlyRevenue =
+    data?.charts?.monthlyRevenue?.map(item => ({
+      date: item._id,
+      amount: item.revenue
+    })) || [];
+
+  const profitTrend =
+    data?.charts?.monthlyRevenue?.map(item => ({
+      date: item._id,
+      profit: item.revenue // you can change to real profit trend later
+    })) || [];
+
   return (
     <>
       {/* KPI Cards */}
       <div className="grid md:grid-cols-4 gap-6">
+        <KpiCard
+          title="Total Revenue"
+          value={data.totals?.totalRevenue || 0}
+        />
 
-        <KpiCard title="Total PMS Profit" value={data.totalPMSProfit} />
-        <KpiCard title="Total AGO Profit" value={data.totalAGOProfit} />
-        <KpiCard title="Other Income" value={data.otherIncome} />
-        <KpiCard title="Net Profit" value={data.totalNetProfit} highlight />
+        <KpiCard
+          title="Total Profit"
+          value={data.totals?.totalProfit || 0}
+        />
+
+        <KpiCard
+          title="Profit Margin (%)"
+          value={data.totals?.profitMargin || 0}
+        />
+
+        <KpiCard
+          title="Growth Rate (%)"
+          value={data.performance?.growthRate || 0}
+          highlight
+        />
       </div>
 
       {/* Charts */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 mt-6">
 
-        {/* Sales Trend */}
-        <ChartCard title="Sales Trend">
+        {/* Monthly Revenue Trend */}
+        <ChartCard title="Monthly Revenue">
           <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={data.salesTrend}>
+            <AreaChart data={monthlyRevenue}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -54,9 +80,9 @@ export default function ExecutiveDashboard({ data }) {
         </ChartCard>
 
         {/* Profit Trend */}
-        <ChartCard title="Net Profit Trend">
+        <ChartCard title="Revenue Trend">
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data.profitTrend}>
+            <LineChart data={profitTrend}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -70,7 +96,6 @@ export default function ExecutiveDashboard({ data }) {
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
-
       </div>
     </>
   );

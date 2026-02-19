@@ -99,7 +99,7 @@ export default function Home() {
 
                 <motion.h1
                   variants={itemVariants}
-                  className="text-6xl md:text-8xl font-black text-white mb-8 drop-shadow-lg leading-tight"
+                  className="text-6xl md:text-8xl font-black text-black mb-8 drop-shadow-lg leading-tight"
                 >
                   DEEPDROP
                   <br />

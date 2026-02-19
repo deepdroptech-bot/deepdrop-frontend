@@ -4,19 +4,10 @@ import { useOutletContext } from "react-router-dom";
 
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  Tooltip
 } from "recharts";
 
 export default function OperationalDashboard() {
@@ -26,14 +17,15 @@ export default function OperationalDashboard() {
   const lowProducts = dashboardData?.lowProducts || [];
 
   const pieData = [
-    { name: "PMS", value: inventory.pms || 0 },
-    { name: "AGO", value: inventory.ago || 0 }
+    { name: "PMS", value: inventory.pmsQty || 0 },
+    { name: "AGO", value: inventory.agoQty || 0 }
   ];
 
   const COLORS = ["#1d4ed8", "#dc2626"];
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
+
       {/* Inventory Pie */}
       <ChartCard title="Inventory Distribution">
         <ResponsiveContainer width="100%" height={300}>
@@ -60,7 +52,9 @@ export default function OperationalDashboard() {
         </h3>
 
         {lowProducts.length === 0 ? (
-          <p className="text-gray-500">All products sufficiently stocked.</p>
+          <p className="text-gray-500">
+            All products sufficiently stocked.
+          </p>
         ) : (
           <ul className="space-y-2">
             {lowProducts.map((product, i) => (
@@ -70,7 +64,7 @@ export default function OperationalDashboard() {
                 transition={{ repeat: Infinity, duration: 2 }}
                 className="text-red-600 font-medium"
               >
-                {product.name} — {product.quantity} left
+                {product.itemName} — {product.quantity} left
               </motion.li>
             ))}
           </ul>
