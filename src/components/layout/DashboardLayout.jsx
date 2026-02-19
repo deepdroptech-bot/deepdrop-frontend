@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }) {
 
           {/* Right - Profile Icon */}
           <Link
-            to="/myprofile"
+            to="/dashboard/myprofile"
             className="flex items-center gap-2 text-blue-700 hover:text-blue-900 transition"
           >
             <UserCircleIcon className="w-8 h-8" />

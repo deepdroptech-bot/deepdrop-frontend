@@ -138,6 +138,7 @@ if (loading)
           <option value="Cashier">Cashier</option>
           <option value="Manager">Manager</option>
           <option value="Accountant">Accountant</option>
+          <option value="Others">Security</option>
         </select>
 
         <input

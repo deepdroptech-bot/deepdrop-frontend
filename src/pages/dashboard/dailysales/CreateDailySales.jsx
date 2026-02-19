@@ -218,6 +218,17 @@ export default function CreateDailySales() {
           {/* ================= PMS ================= */}
           <h3 className="text-xl font-semibold">PMS</h3>
 
+          <input
+            type="number"
+            placeholder="PMS Price Per Litre"
+            className="input-premium"
+            value={form.PMS.pricePerLitre}
+            onChange={e =>
+              handleSectionChange("PMS", "pricePerLitre", e.target.value)
+            }
+            required
+          />
+
           {form.PMS.pumps.map((pump, index) => (
             <div key={index} className="grid md:grid-cols-2 gap-4">
               <input
@@ -243,17 +254,6 @@ export default function CreateDailySales() {
               />
             </div>
           ))}
-
-          <input
-            type="number"
-            placeholder="PMS Price Per Litre"
-            className="input-premium"
-            value={form.PMS.pricePerLitre}
-            onChange={e =>
-              handleSectionChange("PMS", "pricePerLitre", e.target.value)
-            }
-            required
-          />
 
           {form.PMS.expenses.map((expense, index) => (
             <div key={index} className="flex gap-4">
@@ -283,6 +283,16 @@ export default function CreateDailySales() {
           {/* ================= AGO ================= */}
           <h3 className="text-xl font-semibold">AGO</h3>
 
+           <input
+            type="number"
+            placeholder="AGO Price Per Litre"
+            className="input-premium"
+            value={form.AGO.pricePerLitre}
+            onChange={e =>
+              handleSectionChange("AGO", "pricePerLitre", e.target.value)
+            }
+          />
+
           <input
             type="number"
             placeholder="Opening Meter"
@@ -300,16 +310,6 @@ export default function CreateDailySales() {
             value={form.AGO.closingMeter}
             onChange={e =>
               handleSectionChange("AGO", "closingMeter", e.target.value)
-            }
-          />
-
-          <input
-            type="number"
-            placeholder="AGO Price Per Litre"
-            className="input-premium"
-            value={form.AGO.pricePerLitre}
-            onChange={e =>
-              handleSectionChange("AGO", "pricePerLitre", e.target.value)
             }
           />
 

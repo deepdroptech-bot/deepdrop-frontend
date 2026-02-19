@@ -211,6 +211,7 @@ return (
             <option value="Supervisor">Supervisor</option>
             <option value="Manager">Manager</option>
             <option value="Accountant">Accountant</option>
+            <option value="Others">Security</option>
           </select>
 
           <input
