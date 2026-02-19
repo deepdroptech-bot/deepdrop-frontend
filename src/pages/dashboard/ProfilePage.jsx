@@ -4,6 +4,8 @@ import { BouncyButton } from "../../components/BouncyButton"
 import { motion } from "framer-motion"
 import { useAuth } from "../../context/AuthContext"
 import { useNavigate } from "react-router-dom"
+import Input from "../../components/Input"
+
 
 
 export default function ProfilePage() {
