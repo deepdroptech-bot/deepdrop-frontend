@@ -7,7 +7,7 @@ export default function CreateUserModal({ onClose, refresh }) {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "manager",
+    role: "",
   });
 
   const submit = async () => {
