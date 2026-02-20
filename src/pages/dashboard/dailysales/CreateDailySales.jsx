@@ -173,7 +173,45 @@ export default function CreateDailySales() {
     navigate("/dashboard/daily-sales");
   };
 
-  if (loading)
+  const calculatePumpTotals = (pump, pricePerLitre) => {
+  const opening = Number(pump.openingMeter) || 0;
+  const closing = Number(pump.closingMeter) || 0;
+  const price = Number(pricePerLitre) || 0;
+
+  const litres = closing - opening;
+  const amount = litres * price;
+
+  return {
+    litres: litres > 0 ? litres : 0,
+    amount: amount > 0 ? amount : 0
+  };
+};
+
+const getPMSTotal = () => {
+  return form.PMS.pumps.reduce((acc, pump) => {
+    const { amount } = calculatePumpTotals(
+      pump,
+      form.PMS.pricePerLitre
+    );
+    return acc + amount;
+  }, 0);
+};
+
+const calculateAGOTotals = () => {
+  const opening = Number(form.AGO.openingMeter) || 0;
+  const closing = Number(form.AGO.closingMeter) || 0;
+  const price = Number(form.AGO.pricePerLitre) || 0;
+
+  const litres = closing - opening;
+  const amount = litres * price;
+
+  return {
+    litres: litres > 0 ? litres : 0,
+    amount: amount > 0 ? amount : 0
+  };
+};
+
+if (loading)
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
@@ -229,31 +267,52 @@ export default function CreateDailySales() {
             required
           />
 
-          {form.PMS.pumps.map((pump, index) => (
-            <div key={index} className="grid md:grid-cols-2 gap-4">
-              <input
-                type="number"
-                placeholder={`Pump ${pump.pumpNumber} Opening Meter`}
-                className="input-premium"
-                value={pump.openingMeter}
-                onChange={e =>
-                  handlePMSPumpChange(index, "openingMeter", e.target.value)
-                }
-                required
-              />
+          {form.PMS.pumps.map((pump, index) => {
+  const { litres, amount } = calculatePumpTotals(
+    pump,
+    form.PMS.pricePerLitre
+  );
 
-              <input
-                type="number"
-                placeholder={`Pump ${pump.pumpNumber} Closing Meter`}
-                className="input-premium"
-                value={pump.closingMeter}
-                onChange={e =>
-                  handlePMSPumpChange(index, "closingMeter", e.target.value)
-                }
-                required
-              />
-            </div>
-          ))}
+  return (
+    <div key={index} className="space-y-3 border p-4 rounded-xl">
+      <div className="grid md:grid-cols-2 gap-4">
+        <input
+          type="number"
+          placeholder={`Pump ${pump.pumpNumber} Opening Meter`}
+          className="input-premium"
+          value={pump.openingMeter}
+          onChange={e =>
+            handlePMSPumpChange(index, "openingMeter", e.target.value)
+          }
+          required
+        />
+
+        <input
+          type="number"
+          placeholder={`Pump ${pump.pumpNumber} Closing Meter`}
+          className="input-premium"
+          value={pump.closingMeter}
+          onChange={e =>
+            handlePMSPumpChange(index, "closingMeter", e.target.value)
+          }
+          required
+        />
+      </div>
+
+      {/* 🔥 LIVE RESULTS */}
+      <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700">
+        <p>Litres Sold: <span className="font-semibold">{litres.toFixed(2)} L</span></p>
+        <p>Total Amount: <span className="font-semibold">₦{amount.toLocaleString()}</span></p>
+      </div>
+    </div>
+    );
+})}
+
+<div className="text-right text-lg font-bold text-blue-600">
+  PMS Total Sales: ₦{getPMSTotal().toLocaleString()}
+</div>
+
+
 
           {form.PMS.expenses.map((expense, index) => (
             <div key={index} className="flex gap-4">
@@ -334,6 +393,29 @@ export default function CreateDailySales() {
               />
             </div>
           ))}
+
+          {(() => {
+  const { litres, amount } = calculateAGOTotals();
+
+  return (
+    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mt-3">
+      <p>
+        Litres Sold:{" "}
+        <span className="font-semibold">
+          {litres.toFixed(2)} L
+        </span>
+      </p>
+
+      <p>
+        Total Amount:{" "}
+        <span className="font-semibold">
+          ₦{amount.toLocaleString()}
+        </span>
+      </p>
+    </div>
+  );
+})()}
+
 
           <button type="button" onClick={() => addExpense("AGO")} className="btn-secondary">
             + Add AGO Expense
