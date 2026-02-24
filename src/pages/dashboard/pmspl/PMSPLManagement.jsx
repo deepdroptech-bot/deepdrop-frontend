@@ -19,14 +19,19 @@ export default function PMSPLManagement() {
 
   /* ================= FETCH ALL ================= */
   const fetchAll = async () => {
-    try {
-      const res = await pmsPLAPI.getAll();
-      setRecords(res.data || []);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Failed to load records.");
-    }
-  };
+  try {
+    const res = await pmsPLAPI.getAll();
+
+    const data = Array.isArray(res.data)
+      ? res.data
+      : res.data.data || [];
+
+    setRecords(data);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   /* ================= INITIAL LOAD ================= */
   useEffect(() => {

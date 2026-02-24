@@ -138,6 +138,7 @@ export default function ProfitAuditManagement() {
               <div className="bg-blue-50 p-6 rounded-2xl">
                 <h3 className="font-bold mb-2">PMS</h3>
                 <p>Litres Sold: {dailyReport.PMS.litres}</p>
+                <p>Price: {formatCurrency(dailyReport.PMS.price)}</p>
                 <p>Revenue: {formatCurrency(dailyReport.PMS.revenue)}</p>
                 <p>Expenses: {formatCurrency(dailyReport.PMS.expenses)}</p>
                 <p className="font-bold text-green-600">
@@ -148,6 +149,7 @@ export default function ProfitAuditManagement() {
               <div className="bg-green-50 p-6 rounded-2xl">
                 <h3 className="font-bold mb-2">AGO</h3>
                 <p>Litres Sold: {dailyReport.AGO.litres}</p>
+                <p>Price: {formatCurrency(dailyReport.AGO.price)}</p>
                 <p>Revenue: {formatCurrency(dailyReport.AGO.revenue)}</p>
                 <p>Expenses: {formatCurrency(dailyReport.AGO.expenses)}</p>
                 <p className="font-bold text-green-600">
