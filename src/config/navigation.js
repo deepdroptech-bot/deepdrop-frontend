@@ -16,7 +16,7 @@ export const navItems = [
   { name: "Daily Sales", path: "daily-sales", icon: DollarSign },
   { name: "Staff", path: "staff", icon: Users },
   { name: "Bank", path: "bank", icon: Landmark },
-  { name: "PMS", path: "inventory", icon: Fuel },
+  { name: "Inventory", path: "inventory", icon: Fuel },
   { name: "Expenses", path: "expenses", icon: Package },
   { name: "P & L", path: "pmspl", icon: TrendingUp },
   { name: "Audit", path: "profit-audit", icon: ClipboardCheck },
