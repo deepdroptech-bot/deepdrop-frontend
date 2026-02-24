@@ -137,24 +137,26 @@ export default function ProfitAuditManagement() {
 
               <div className="bg-blue-50 p-6 rounded-2xl">
                 <h3 className="font-bold mb-2">PMS</h3>
+                <p>Litres Sold: {dailyReport.PMS.litres}</p>
                 <p>Revenue: {formatCurrency(dailyReport.PMS.revenue)}</p>
                 <p>Expenses: {formatCurrency(dailyReport.PMS.expenses)}</p>
                 <p className="font-bold text-green-600">
-                  Net: {formatCurrency(dailyReport.PMS.netProfit)}
+                  Net Amount: {formatCurrency(dailyReport.PMS.netProfit)}
                 </p>
               </div>
 
               <div className="bg-green-50 p-6 rounded-2xl">
                 <h3 className="font-bold mb-2">AGO</h3>
+                <p>Litres Sold: {dailyReport.AGO.litres}</p>
                 <p>Revenue: {formatCurrency(dailyReport.AGO.revenue)}</p>
                 <p>Expenses: {formatCurrency(dailyReport.AGO.expenses)}</p>
                 <p className="font-bold text-green-600">
-                  Net: {formatCurrency(dailyReport.AGO.netProfit)}
+                  Net Amount: {formatCurrency(dailyReport.AGO.netProfit)}
                 </p>
               </div>
 
               <div className="bg-purple-50 p-6 rounded-2xl">
-                <h3 className="font-bold mb-2">Total Profit</h3>
+                <h3 className="font-bold mb-2">Total Net Amount</h3>
                 <p className="text-2xl font-bold text-indigo-700">
                   {formatCurrency(dailyReport.totalNetProfit)}
                 </p>
@@ -180,39 +182,132 @@ export default function ProfitAuditManagement() {
           </div>
 
           {summary && (
-            <div className="grid md:grid-cols-3 gap-6">
+  <div className="grid md:grid-cols-3 gap-8 mt-6">
 
-              <div className="bg-blue-50 p-6 rounded-2xl">
-                <h3 className="font-bold">PMS Net</h3>
+    {/* ================= PMS CARD ================= */}
+    <div className="relative overflow-hidden bg-white border border-gray-100 rounded-3xl p-7 shadow-lg hover:shadow-xl transition-all">
 
-                // We can also show lites, revenue and expenses with color here if needed
-                <p className="text-sm text-gray-500">
-                  {summary.PMS.litres} litres | Revenue: {formatCurrency(summary.PMS.revenue)} | Expenses: {formatCurrency(summary.PMS.expenses)}
-                </p>
-                <p className="text-xl font-bold text-green-600">
-                  {formatCurrency(summary.PMS.netProfit)} Net Profit
-                </p>
-              </div>
+      <div className="flex justify-between items-start mb-5">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            PMS Performance
+          </h3>
+          <p className="text-sm text-gray-400">
+            Premium Motor Spirit
+          </p>
+        </div>
 
-              <div className="bg-green-50 p-6 rounded-2xl">
-                <h3 className="font-bold">AGO Net</h3>
-                <p className="text-sm text-gray-500">
-                  {summary.AGO.litres} litres | Revenue: {formatCurrency(summary.AGO.revenue)} | Expenses: {formatCurrency(summary.AGO.expenses)}
-                </p>
-                <p className="text-xl font-bold text-green-600">
-                  {formatCurrency(summary.AGO.netProfit)}
-                </p>
-              </div>
+        <div className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold">
+          PMS
+        </div>
+      </div>
 
-              <div className="bg-indigo-50 p-6 rounded-2xl">
-                <h3 className="font-bold">Grand Profit</h3>
-                <p className="text-2xl font-bold text-indigo-700">
-                  {formatCurrency(summary.grandTotalProfit)}
-                </p>
-              </div>
+      <div className="space-y-2 text-sm text-gray-600">
+        <p>
+          <span className="font-medium text-gray-700">Litres Sold:</span>{" "}
+          {summary.PMS.litres.toLocaleString()} L
+        </p>
+        <p>
+          <span className="font-medium text-gray-700">Revenue:</span>{" "}
+          {formatCurrency(summary.PMS.revenue)}
+        </p>
+        <p>
+          <span className="font-medium text-gray-700">Expenses:</span>{" "}
+          {formatCurrency(summary.PMS.expenses)}
+        </p>
+      </div>
 
-            </div>
-          )}
+      <div
+        className={`mt-6 text-2xl font-bold ${
+          summary.PMS.netProfit >= 0
+            ? "text-green-600"
+            : "text-red-600"
+        }`}
+      >
+        {formatCurrency(summary.PMS.netProfit)}
+        <span className="text-sm font-medium ml-2 text-gray-400">
+          Net Profit
+        </span>
+      </div>
+    </div>
+
+    {/* ================= AGO CARD ================= */}
+    <div className="relative overflow-hidden bg-white border border-gray-100 rounded-3xl p-7 shadow-lg hover:shadow-xl transition-all">
+
+      <div className="flex justify-between items-start mb-5">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            AGO Performance
+          </h3>
+          <p className="text-sm text-gray-400">
+            Automotive Gas Oil
+          </p>
+        </div>
+
+        <div className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs font-semibold">
+          AGO
+        </div>
+      </div>
+
+      <div className="space-y-2 text-sm text-gray-600">
+        <p>
+          <span className="font-medium text-gray-700">Litres Sold:</span>{" "}
+          {summary.AGO.litres.toLocaleString()} L
+        </p>
+        <p>
+          <span className="font-medium text-gray-700">Revenue:</span>{" "}
+          {formatCurrency(summary.AGO.revenue)}
+        </p>
+        <p>
+          <span className="font-medium text-gray-700">Expenses:</span>{" "}
+          {formatCurrency(summary.AGO.expenses)}
+        </p>
+      </div>
+
+      <div
+        className={`mt-6 text-2xl font-bold ${
+          summary.AGO.netProfit >= 0
+            ? "text-green-600"
+            : "text-red-600"
+        }`}
+      >
+        {formatCurrency(summary.AGO.netProfit)}
+        <span className="text-sm font-medium ml-2 text-gray-400">
+          Net Profit
+        </span>
+      </div>
+    </div>
+
+    {/* ================= GRAND TOTAL ================= */}
+    <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-3xl p-8 shadow-xl">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Total Daily Performance
+      </h3>
+
+      <p className="text-sm text-indigo-200 mb-6">
+        Combined PMS & AGO Net Result
+      </p>
+
+      <div
+        className={`text-4xl font-extrabold ${
+          summary.grandTotalProfit >= 0
+            ? "text-white"
+            : "text-red-200"
+        }`}
+      >
+        {formatCurrency(summary.grandTotalProfit)}
+      </div>
+
+      <p className="text-sm mt-3 opacity-80">
+        {summary.grandTotalProfit >= 0
+          ? "Overall Profit"
+          : "Overall Loss"}
+      </p>
+    </div>
+
+  </div>
+)}
         </div>
       )}
 
