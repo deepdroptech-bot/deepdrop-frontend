@@ -162,11 +162,24 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
         ⚠ Low AGO Stock
       </p>
     )}
+  </div>
 
-    {/* ================= Total Products ================= */}
-    <p className="text-sm text-gray-500 mt-2">
-      {inventory.products.slots.length} Product Slots
+  {/* PRODUCTS TOTAL */}
+  <div className={`p-6 rounded-2xl shadow-lg ${
+    inventory.products.slots.reduce((sum, slot) => sum + slot.quantity, 0) < PRODUCT_THRESHOLD * inventory.products.slots.length
+      ? "bg-red-50 border border-red-300"
+      : "bg-green-50"
+  }`}>
+    <h3 className="font-semibold text-gray-700">Total Products</h3>
+    <p className="text-2xl font-bold">
+      {formatNumber(inventory.products.slots.reduce((sum, slot) => sum + slot.quantity, 0))} Units
     </p>
+
+    {inventory.products.slots.reduce((sum, slot) => sum + slot.quantity, 0) < PRODUCT_THRESHOLD * inventory.products.slots.length && (
+      <p className="text-red-600 text-sm mt-2 font-semibold">
+        ⚠ Low Product Stock
+      </p>
+    )}
   </div>
 </div>
 
