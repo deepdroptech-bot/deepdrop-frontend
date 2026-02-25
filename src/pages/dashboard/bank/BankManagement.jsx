@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { bankAPI } from "../../../services/bankService";
+import Permissions from "../../../components/Permission ";
 
 export default function BankManagement() {
   const [bank, setBank] = useState(null);
@@ -132,6 +133,7 @@ export default function BankManagement() {
           Add Bank Balance
         </h2>
 
+        <Permissions permission="AD_AC">
         <form
           onSubmit={handleSubmit}
           className="grid md:grid-cols-3 gap-4"
@@ -158,11 +160,11 @@ export default function BankManagement() {
               setForm({ ...form, amount: e.target.value })
             }
           />
-
           <button className="bg-indigo-600 text-white rounded-xl p-3 font-semibold hover:bg-indigo-700 transition">
             Add Balance
           </button>
         </form>
+        </Permissions>
       </div>
 
     </div>

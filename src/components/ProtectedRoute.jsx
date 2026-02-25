@@ -1,14 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export default function ProtectedRoute({ role }) {
+export default function ProtectedRoute({ allowedRoles }) {
   const { user, loading } = useAuth();
 
   if (loading) return null;
 
   if (!user) return <Navigate to="/get-started" replace />;
 
-  if (role && user.role !== role) {
+   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 
