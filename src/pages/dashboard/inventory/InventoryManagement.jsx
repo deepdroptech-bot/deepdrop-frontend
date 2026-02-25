@@ -71,8 +71,11 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
     </div>
   );
 
-  const formatCurrency = (val) =>
-    `₦${Number(val || 0).toLocaleString()}`;
+  const formatNumber = (num) =>
+  Number(num).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   const lowStockProducts = inventory.products.slots.filter(
   (slot) =>
@@ -133,7 +136,7 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
   }`}>
     <h3 className="font-semibold text-gray-700">Total PMS</h3>
     <p className="text-2xl font-bold">
-      {inventory.fuel.PMS.totalQuantity} L
+      {formatNumber(inventory.fuel.PMS.totalQuantity)} L
     </p>
 
     {inventory.fuel.PMS.totalQuantity < PMS_THRESHOLD && (
@@ -151,7 +154,7 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
   }`}>
     <h3 className="font-semibold text-gray-700">Total AGO</h3>
     <p className="text-2xl font-bold">
-      {inventory.fuel.AGO.quantityLitres} L
+      {formatNumber(inventory.fuel.AGO.quantityLitres)} L
     </p>
 
     {inventory.fuel.AGO.quantityLitres < AGO_THRESHOLD && (
@@ -159,13 +162,10 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
         ⚠ Low AGO Stock
       </p>
     )}
-  </div>
 
-  {/* OTHER INCOME BANK */}
-  <div className="bg-purple-50 p-6 rounded-2xl shadow-lg">
-    <h3 className="font-semibold text-gray-700">Other Income Bank</h3>
-    <p className="text-2xl font-bold">
-      ₦{inventory.bank.otherIncomeBalance.toLocaleString()}
+    {/* ================= Total Products ================= */}
+    <p className="text-sm text-gray-500 mt-2">
+      {inventory.products.slots.length} Product Slots
     </p>
   </div>
 </div>
@@ -298,7 +298,7 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
               Well {well.wellNumber}
             </h3>
             <span className="font-bold">
-              {well.quantity} L
+              {formatNumber(well.quantity)} L
             </span>
           </div>
 
@@ -345,7 +345,7 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
         <div className="flex justify-between mb-2">
           <span className="font-semibold">AGO Tank</span>
           <span className="font-bold">
-            {inventory.fuel.AGO.quantityLitres} L
+            {formatNumber(inventory.fuel.AGO.quantityLitres)} L
           </span>
         </div>
 
