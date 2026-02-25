@@ -127,13 +127,12 @@ export default function BankManagement() {
         })}
       </div>
 
+        <Permissions permission="AD_AC">
       {/* ================= ADD BALANCE FORM ================= */}
       <div className="bg-white p-6 rounded-3xl shadow-xl">
         <h2 className="text-xl font-bold mb-4 text-gray-700">
           Add Bank Balance
         </h2>
-
-        <Permissions permission="AD_AC">
         <form
           onSubmit={handleSubmit}
           className="grid md:grid-cols-3 gap-4"
@@ -164,8 +163,8 @@ export default function BankManagement() {
             Add Balance
           </button>
         </form>
-        </Permissions>
       </div>
+      </Permissions>
 
     </div>
   );
