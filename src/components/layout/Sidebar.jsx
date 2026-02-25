@@ -2,9 +2,16 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { navItems } from "../../config/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+
+  const { user } = useAuth();
+
+const filteredNavItems = navItems.filter(item =>
+  item.roles?.includes(user?.role)
+);
 
   return (
     <aside
@@ -30,7 +37,7 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 mt-6 space-y-2 px-2">
-        {navItems.map((item) => (
+        {filteredNavItems.map((item) => (
           <NavLink
             key={item.name}
             to={item.path}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { staffAPI } from "../../../services/staffService";
+import Permissions from "../../../components/Permission ";
 
 export default function StaffProfile() {
   const { id } = useParams();
@@ -253,12 +254,14 @@ export default function StaffProfile() {
     {/* ACTION BUTTONS */}
     <div className="flex flex-wrap gap-4 pt-4">
 
+    <Permissions permission="AD_AC">
       <button
         className="px-6 py-3 rounded-2xl font-semibold bg-blue-500 text-white shadow hover:shadow-lg transition"
         onClick={handlePaySalary}
       >
         Pay Salary
       </button>
+      </Permissions>
 
       <button
         className="px-6 py-3 rounded-2xl font-semibold bg-white border border-gray-300 shadow hover:shadow-lg transition"

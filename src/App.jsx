@@ -49,12 +49,27 @@ import ExpenseManagement from "./pages/dashboard/expense/ExpenseManagement";
 // profit and audit management page
 import ProfitAuditManagement from "./pages/dashboard/profit&audit/Profit&AuditManagement";
 
-// Unauthorized page
-import Unauthorized from "./pages/dashboard/Unauthorized";
+// import { useState, useEffect } from "react";
+// import Loader from "./components/Loader";
 
 import Test from "./pages/Test";
 
 function App() {
+  
+  // const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   // simulate app boot / API check
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
+
+  //   return () => clearTimeout(timer);
+  // }, []);
+
+  // if (loading) return <Loader />;
+
+
   return (
     <BrowserRouter>
    {/* Public routes */}
@@ -65,47 +80,56 @@ function App() {
         <Route path="/login/ekiosa" element={<Login />} />
         <Route path="/login" element={<Login />} />
 
- {/* Protected dashboard routes (admin) */}
-  <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-  <Route path="/dashboard/allusers" element={<UsersPage />} />
-  <Route path="/dashboard/allusers/create" element={<CreateUserModal />} />
-  <Route path="/dashboard/allusers/edit/:id" element={<EditUserModal />} />
+ {/* Protected dashboard routes */}
+        <Route element={<ProtectedRoute />}>
+  <Route path="/dashboard" element={<Dashboard />}>
+
+    <Route index element={<Overview />} />
+
+    {/* User management routes */}
+    <Route path="myprofile" element={<ProfilePage />} />
+    <Route path="allusers" element={<UsersPage />} />
+    <Route path="createuser" element={<CreateUserModal />} />
+    <Route path="edituser" element={<EditUserModal />} />
+
+    {/* Staff management routes */}
+    <Route path="staff" element={<StaffList />} />
+    <Route path="staff/new" element={<CreateStaff />} />
+    <Route path="staff/:id/edit" element={<EditStaff />} />
+    <Route path="staff/adjustments/:id" element={<StaffAdjustments />} />
+    <Route path="staff/:id" element={<StaffProfile />} />
+
+    {/* Daily sales management routes */}
+    <Route path="daily-sales" element={<DailySalesManagement />} />
+    <Route path="daily-sales/summary" element={<DailySalesSummary />} />
+    <Route path="daily-sales/:id/edit" element={<EditDailySales />} />
+    <Route path="daily-sales/new" element={<CCreateDailySales />} />
+    <Route path="daily-sales/:id" element={<ViewDailySales />} />
+
+    {/* Inventory management routes */}
+    <Route path="inventory" element={<InventoryManagement />} />
+
+    {/* Bank management routes */}
+    <Route path="bank" element={<BankManagement />} />
+
+    {/* Retained earnings management route */}
+    <Route path="retained-earnings" element={<RetainedEarningsPage />} />
+
+    {/* PMSPL management route */}
+    <Route path="pmspl" element={<PMSPLManagement />} />
+
+    {/* Expense management route */}
+    <Route path="expenses" element={<ExpenseManagement />} />
+
+    {/* Profit and audit management route */}
+    <Route path="profit-audit" element={<ProfitAuditManagement />} />
+
   </Route>
+</Route>
 
-  {/* Protected dashboard routes (admin + manager + accountant) */}
-  <Route element={<ProtectedRoute allowedRoles={["admin", "manager", "accountant"]} />}>
-  <Route path="/dashboard" element={<Dashboard />} />
-  <Route path="/dashboard/overview" element={<Overview />} />
-  <Route path="/dashboard/profile" element={<ProfilePage />} />
-  <Route path="/dashboard/daily-sales" element={<DailySalesManagement />} />
-  <Route path="/dashboard/daily-sales/create" element={<CCreateDailySales />} />
-  <Route path="/dashboard/daily-sales/edit/:id" element={<EditDailySales />} />
-  <Route path="/dashboard/daily-sales/view/:id" element={<ViewDailySales />} />
-  <Route path="/dashboard/inventory" element={<InventoryManagement />} />
-  </Route>
 
-  {/* Protected dashboard routes (admin + manager) */}
-  <Route element={<ProtectedRoute allowedRoles={["admin", "manager"]} />}>
-  <Route path="/dashboard/staff" element={<StaffList />} />
-  <Route path="/dashboard/staff/create" element={<CreateStaff />} />
-  <Route path="/dashboard/staff/edit/:id" element={<EditStaff />} />
-  <Route path="/dashboard/staff/adjustments/:id" element={<StaffAdjustments />} />
-  <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
-  </Route>
 
-  {/* Protected dashboard routes (admin + accountant) */}
-  <Route element={<ProtectedRoute allowedRoles={["admin", "accountant"]} />}>
-  <Route path="/dashboard/bank" element={<BankManagement />} />
-  <Route path="/dashboard/pmspl" element={<PMSPLManagement />} />
-  <Route path="/dashboard/expenses" element={<ExpenseManagement />} />
-  <Route path="/dashboard/profit-audit" element={<ProfitAuditManagement />} />
-  <Route path="/dashboard/retained-earnings" element={<RetainedEarningsPage />} />
-  </Route>
 
-  {/* Unauthorized route */}
-  <Route path="/unauthorized" element={<Unauthorized />} />
-
-  {/* Catch-all for testing */}
 <Route path="/test" element={<Test />} />
 
       </Routes>
