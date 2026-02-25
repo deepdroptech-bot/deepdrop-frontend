@@ -35,6 +35,8 @@ export default function EditDailySales() {
       { itemName: "", amount: "" }
     ],
 
+    notes: [""],
+
     updateReason: ""
   });
 
@@ -291,6 +293,27 @@ export default function EditDailySales() {
                   setForm({ ...form, otherIncome: updated });
                 }}
                 className="input-primary"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* NOTES */}
+        <div>
+          <h3 className="font-bold text-lg">Notes</h3>
+
+          {form.notes.map((note, index) => (
+            <div key={index} className="flex gap-4 mb-2">
+              <input
+                type="text"
+                placeholder="Add a note (e.g. POS and Cash Amounts)"
+                className="input-primary"
+                value={note}
+                onChange={(e) => {
+                  const updated = [...form.notes];
+                  updated[index] = e.target.value;
+                  setForm({ ...form, notes: updated });
+                }}
               />
             </div>
           ))}

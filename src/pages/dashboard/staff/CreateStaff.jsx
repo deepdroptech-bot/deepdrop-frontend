@@ -140,6 +140,7 @@ if (loading)
           <option value="Accountant">Accountant</option>
           <option value="Security">Security</option>
           <option value="Cleaner">Cleaner</option>
+          <option value="Driver">Driver</option>
         </select>
 
         <input

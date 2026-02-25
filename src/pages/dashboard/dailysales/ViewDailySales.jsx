@@ -214,6 +214,19 @@ export default function ViewDailySales() {
         </p>
       </div>
 
+      {/* ================= NOTES ================= */}
+      <div className="bg-white p-6 rounded-3xl shadow-xl">
+        <h2 className="text-xl font-bold text-gray-700 mb-4">
+          Notes
+        </h2>
+
+        {sales.notes.map((note, index) => (
+          <p key={index} className="text-gray-600 mb-2">
+            {note}
+          </p>
+        ))}
+      </div>
+
       {/* ================= AUDIT ================= */}
       <div className="bg-white p-6 rounded-3xl shadow-lg">
         <h2 className="text-xl font-bold text-gray-700 mb-4">

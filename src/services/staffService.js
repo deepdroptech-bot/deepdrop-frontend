@@ -19,6 +19,9 @@ export const staffAPI = {
   addDeduction: (id, data) =>
     axios.patch(`/staff/${id}/deduction`, data),
 
+  paySalary: (id) =>
+    axios.patch(`/staff/${id}/pay`),
+
   deactivate: (id) =>
     axios.patch(`/staff/${id}/deactivate`),
 

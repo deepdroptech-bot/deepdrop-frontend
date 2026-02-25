@@ -65,6 +65,12 @@ export default function StaffProfile() {
     setDeduction({ amount: "", reason: "" });
   };
 
+  const handlePaySalary = async () => {
+    await staffAPI.paySalary(id);
+    const updated = await staffAPI.getById(id);
+    setStaff(updated.data);
+  };
+
   const toggleStatus = async () => {
     staff.isActive
       ? await staffAPI.deactivate(id)
@@ -246,6 +252,13 @@ export default function StaffProfile() {
 
     {/* ACTION BUTTONS */}
     <div className="flex flex-wrap gap-4 pt-4">
+
+      <button
+        className="px-6 py-3 rounded-2xl font-semibold bg-blue-500 text-white shadow hover:shadow-lg transition"
+        onClick={handlePaySalary}
+      >
+        Pay Salary
+      </button>
 
       <button
         className="px-6 py-3 rounded-2xl font-semibold bg-white border border-gray-300 shadow hover:shadow-lg transition"

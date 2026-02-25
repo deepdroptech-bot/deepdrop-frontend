@@ -33,7 +33,9 @@ export default function CreateDailySales() {
 
     otherIncome: [
       { itemName: "", amount: "" }
-    ]
+    ],
+
+    notes: [""]
   });
 
   useEffect(() => {
@@ -165,7 +167,9 @@ export default function CreateDailySales() {
       otherIncome: form.otherIncome.map(i => ({
         itemName: i.itemName,
         amount: Number(i.amount)
-      }))
+      })),
+
+      notes: [...form.notes.filter(n => n.trim() !== "")]
     };
 
     await dailySalesAPI.create(cleanedForm);
@@ -488,8 +492,26 @@ if (loading)
             + Add Income
           </button>
 
+          {/* ================= NOTES ================= */}
+          <h3 className="text-xl font-semibold">Notes</h3>
+          {form.notes.map((note, index) => (
+            <div key={index} className="flex gap-4">
+              <input
+                placeholder="Add a note (e.g. POS and Cash Amounts)"
+                className="input-premium"
+                value={note}
+                onChange={e => {
+                  const updated = [...form.notes];
+                  updated[index] = e.target.value;
+                  setForm({ ...form, notes: updated });
+                }}
+              />
+            </div>
+          ))}
+
+
           <button className="btn-primary w-full">
-            Save Daily Sales
+            Submit Daily Sales
           </button>
         </form>
       </div>
