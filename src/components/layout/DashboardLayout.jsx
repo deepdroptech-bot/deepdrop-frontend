@@ -8,11 +8,13 @@ export default function DashboardLayout({ children }) {
   const { user } = useAuth();
 
   return (
-    <div className="flex min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-blue-50">
+
+      <div className="flex">
 
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col md:ml-64">
 
         {/* Topbar */}
         <header className="bg-white shadow-sm border-b border-blue-100 p-4 flex justify-between items-center">
@@ -40,6 +42,12 @@ export default function DashboardLayout({ children }) {
       </div>
 
       <MobileNav />
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white shadow-inner border-t border-blue-100 p-4 text-center text-sm text-gray-500">
+        &copy; {new Date().getFullYear()} DeepDrop Energy Tech™. All rights reserved.
+      </footer>
     </div>
   );
 }

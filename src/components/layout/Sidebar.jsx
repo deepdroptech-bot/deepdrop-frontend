@@ -16,7 +16,7 @@ const filteredNavItems = navItems.filter(item =>
   return (
     <aside
       className={`
-        hidden md:flex flex-col
+        hidden md:flex flex-col fixed top-0 left-0 h-screen
         ${collapsed ? "w-20" : "w-64"}
         transition-all duration-300
         bg-gradient-to-b from-red-600 via-blue-700 to-blue-900
@@ -36,7 +36,7 @@ const filteredNavItems = navItems.filter(item =>
       </div>
 
       {/* Nav */}
-      <nav className="fixed flex-1 mt-6 space-y-2 px-2">
+      <nav className=" flex-1 mt-6 space-y-2 px-2">
         {filteredNavItems.map((item) => (
           <NavLink
             key={item.name}
