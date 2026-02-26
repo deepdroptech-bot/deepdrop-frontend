@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { expenseAPI } from "../../../services/expenseService";
+import { useNavigate } from "react-router-dom";
 
 export default function ExpenseManagement() {
 
@@ -52,6 +53,8 @@ export default function ExpenseManagement() {
     fetchHistory();
   };
 
+  const navigate = useNavigate();
+
   const formatCurrency = (val) =>
     `₦${Number(val || 0).toLocaleString()}`;
 
@@ -81,7 +84,7 @@ export default function ExpenseManagement() {
           Expense Management
         </h1>
         <p className="text-red-100 mt-2">
-          Track operational spending & bank deductions
+          Input Expenses and View Historical Spending Patterns
         </p>
       </div>
 
@@ -220,7 +223,8 @@ export default function ExpenseManagement() {
           {history.map((doc) => (
             <div
               key={doc._id}
-              className="bg-gray-50 p-5 rounded-2xl shadow-sm"
+              onClick={() => {navigate(`/dashboard/expenses/${doc._id}`)}}
+              className="bg-gray-50 p-5 rounded-2xl shadow-sm cursor-pointer hover:bg-gray-100 transition"
             >
               <div className="flex justify-between">
                 <div>

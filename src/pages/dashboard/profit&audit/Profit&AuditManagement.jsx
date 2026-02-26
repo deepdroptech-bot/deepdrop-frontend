@@ -85,10 +85,10 @@ export default function ProfitAuditManagement() {
       {/* ================= HEADER ================= */}
       <div className="bg-gradient-to-r from-indigo-700 to-purple-700 text-white p-8 rounded-3xl shadow-xl">
         <h1 className="text-3xl font-bold">
-          Profit & Audit Center
+          Sales Summary & Audit Center
         </h1>
         <p className="text-indigo-200 mt-2">
-          Financial insights and accountability tracking
+          Summarize Sales Performance and Track Who did What
         </p>
       </div>
 

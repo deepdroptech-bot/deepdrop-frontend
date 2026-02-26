@@ -16,4 +16,7 @@ export const expenseAPI = {
 
   getHistory: () =>
     API.get("/expenses/history"),
+
+  getDocumentExpenses: (id) =>
+    API.get(`/expenses/document/${id}`)
 };

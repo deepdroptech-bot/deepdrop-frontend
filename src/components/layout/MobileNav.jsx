@@ -16,16 +16,15 @@ export default function MobileNav() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY > lastScrollY) {
-        // scrolling down
-        setVisible(false);
-      } else {
-        // scrolling up
-        setVisible(true);
-      }
+      const threshold = 10;
 
-      setLastScrollY(currentScrollY);
-    };
+if (Math.abs(currentScrollY - lastScrollY) > threshold) {
+  if (currentScrollY > lastScrollY) {
+    setVisible(false);
+  } else {
+    setVisible(true);
+  }
+}};
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

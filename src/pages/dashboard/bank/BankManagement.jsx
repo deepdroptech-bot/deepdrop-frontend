@@ -68,7 +68,7 @@ export default function BankManagement() {
           Bank Management
         </h1>
         <p className="text-gray-300 mt-2">
-          Track and manage financial balances
+          Check Current Bank Balances and Add Funds to Your Accounts
         </p>
       </div>
 
@@ -85,7 +85,7 @@ export default function BankManagement() {
       {/* ================= ALERT ================= */}
       {totalBalance < LOW_BALANCE_THRESHOLD && (
         <div className="bg-red-600 text-white p-4 rounded-2xl shadow-lg animate-pulse">
-          🚨 Bank balance is below recommended threshold.
+          🚨 Bank balance is below the healthy amount.
         </div>
       )}
 

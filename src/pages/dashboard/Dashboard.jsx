@@ -29,10 +29,10 @@ export default function Dashboard() {
       {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-blue-800">
-          Executive Dashboard
+          Dashboard Services
         </h1>
         <p className="text-gray-500 text-sm">
-          Real-time financial & operational overview
+          Create, manage, and monitor all your dashboard services in one place. Get real-time insights and stay on top of your operations.
         </p>
       </div>
 

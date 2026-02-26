@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }) {
 
       <Sidebar />
 
-      <div className="flex-1 flex flex-col md:ml-64">
+      <div className="flex-1 flex flex-col">
 
         {/* Topbar */}
         <header className="bg-white shadow-sm border-b border-blue-100 p-4 flex justify-between items-center">

@@ -45,6 +45,7 @@ import PMSPLManagement from "./pages/dashboard/pmspl/PMSPLManagement";
 
 // expense management page
 import ExpenseManagement from "./pages/dashboard/expense/ExpenseManagement";
+import ViewExpense from "./pages/dashboard/expense/ViewExpense";
 
 // profit and audit management page
 import ProfitAuditManagement from "./pages/dashboard/profit&audit/Profit&AuditManagement";
@@ -120,6 +121,7 @@ function App() {
 
     {/* Expense management route */}
     <Route path="expenses" element={<ExpenseManagement />} />
+    <Route path="expenses/:id" element={<ViewExpense />} />
 
     {/* Profit and audit management route */}
     <Route path="profit-audit" element={<ProfitAuditManagement />} />

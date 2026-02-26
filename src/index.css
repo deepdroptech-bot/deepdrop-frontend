@@ -64,4 +64,12 @@
          bg-gray-100 hover:bg-gray-200 transition;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 }
