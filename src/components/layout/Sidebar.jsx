@@ -16,7 +16,7 @@ const filteredNavItems = navItems.filter(item =>
   return (
     <aside
       className={`
-        hidden md:flex flex-col
+        hidden md: fixed flex flex-col
         ${collapsed ? "w-20" : "w-64"}
         transition-all duration-300
         bg-gradient-to-b from-red-600 via-blue-700 to-blue-900
