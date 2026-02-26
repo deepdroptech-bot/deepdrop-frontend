@@ -511,7 +511,7 @@ if (loading)
 
 
           <button className="btn-primary w-full">
-            Submit Daily Sales
+            Draft Daily Sales
           </button>
         </form>
       </div>

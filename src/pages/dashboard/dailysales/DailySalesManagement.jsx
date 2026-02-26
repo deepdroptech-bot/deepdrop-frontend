@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dailySalesAPI } from "../../../services/dailySalesService";
+import Permissions from "../../../components/Permission ";
 
 export default function DailySalesManagement() {
   const [sales, setSales] = useState([]);
@@ -188,15 +189,17 @@ export default function DailySalesManagement() {
               </>
             )}
 
+            
             {sale.approvalStatus === "submitted" && (
+              <Permissions permission="AD_AC">
               <button
                 onClick={() => handleApprove(sale._id)}
                 className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
               >
                 Approve
               </button>
+          </Permissions>
             )}
-
           </div>
         </div>
       ))}

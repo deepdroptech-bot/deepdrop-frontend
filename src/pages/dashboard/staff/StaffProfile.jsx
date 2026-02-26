@@ -281,12 +281,14 @@ export default function StaffProfile() {
         {staff.isActive ? "Deactivate" : "Activate"}
       </button>
 
+      <Permissions permission="AD_AC">
       <button
         className="px-6 py-3 rounded-2xl font-semibold text-white bg-red-600 hover:bg-red-700 shadow transition"
         onClick={deleteStaff}
       >
         Delete Staff
       </button>
+      </Permissions>
     </div>
 
   </div>

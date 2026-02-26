@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { inventoryAPI } from "../../../services/inventoryService";
+import Permissions from "../../../components/Permission ";
 
 export default function InventoryManagement() {
   const [inventory, setInventory] = useState(null);
@@ -185,6 +186,7 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
 
 
       {/* ================= ADD FUEL STOCK ================= */}
+      <Permissions permission="AD_AC">
       <div className="bg-white p-6 rounded-3xl shadow-xl">
         <h2 className="text-xl font-bold mb-4 text-gray-700">
           Add Fuel Stock
@@ -282,6 +284,7 @@ const PRODUCT_MAX_CAPACITY = 100; // assumed max per slot (adjust if needed)
           </button>
         </form>
       </div>
+      </Permissions>
 
         {/* ================= PMS WELLS Display ================= */}
 <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-3xl shadow-xl">
