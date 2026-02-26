@@ -1,17 +1,14 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { navItems } from "../../config/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
-export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
-
+export default function Sidebar({ collapsed, setCollapsed }) {
   const { user } = useAuth();
 
-const filteredNavItems = navItems.filter(item =>
-  item.roles?.includes(user?.role)
-);
+  const filteredNavItems = navItems.filter(item =>
+    item.roles?.includes(user?.role)
+  );
 
   return (
     <aside
@@ -36,14 +33,16 @@ const filteredNavItems = navItems.filter(item =>
       </div>
 
       {/* Nav */}
-      <nav className=" flex-1 mt-6 space-y-2 px-2">
+      <nav className="flex-1 mt-6 space-y-2 px-2">
         {filteredNavItems.map((item) => (
           <NavLink
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
               `flex items-center gap-3 p-3 rounded-xl transition-all
-               ${isActive ? "bg-white text-blue-700 font-semibold" : "hover:bg-white/20"}`
+               ${isActive
+                 ? "bg-white text-blue-700 font-semibold"
+                 : "hover:bg-white/20"}`
             }
           >
             <item.icon size={20} />
