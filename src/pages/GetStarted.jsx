@@ -32,7 +32,7 @@ export default function GetStartedPage() {
       name: "Ekiosa Branch",
       image:
         ekiosa,
-      link: "/login/ekiosa",
+      link: "https://ekiosadeepdrop.netlify.app/login/ekiosa",
       icon: <User className="w-6 h-6 text-white" />,
       color: "bg-blue-500",
       borderColor: "border-blue-500",
