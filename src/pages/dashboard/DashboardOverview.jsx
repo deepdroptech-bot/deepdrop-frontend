@@ -5,6 +5,8 @@ import OperationalDashboard from "./OperationalDashboard";
 import { useOutletContext } from "react-router-dom";
 import StockAlert from "../../components/dashboard/StockAlert";
 
+import Permissions from "../../components/Permission ";
+
 export default function Overview() {
   const { dashboardData } = useOutletContext();
   const [view, setView] = useState("executive");

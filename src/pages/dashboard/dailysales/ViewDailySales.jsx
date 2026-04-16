@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { dailySalesAPI } from "../../../services/dailySalesService";
+import { pdfAPI } from "../../../services/pdfService";
 
 export default function ViewDailySales() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [sales, setSales] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingPDF, setLoadingPDF] = useState(false);
 
   useEffect(() => {
     fetchSales();
-  }, []);
+  }, [id]);
 
   const fetchSales = async () => {
     try {
@@ -23,12 +25,47 @@ export default function ViewDailySales() {
     }
   };
 
+   const handleDownloadPDF = async (id) => {
+    try {
+      setLoadingPDF(true); // Start loading
+
+      const res = await pdfAPI.generateSalesPDF(id);
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Daily_Sales_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error("PDF download failed:", err);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setLoadingPDF(false); // Stop loading
+    }
+  };
+
+  // const salesId = sales._id
+
   const formatCurrency = (value) =>
     `₦${Number(value || 0).toLocaleString()}`;
 
+  const formatNumber = (value) =>
+    (value || 0).toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+
+  
+
   if (loading)
   return (
-    <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="min-h-[60vh] flex items-center justify-center max-w-full overflow-x-hidden">
       <div className="bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl px-12 py-10 shadow-2xl text-center">
         <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-red-500 to-blue-600 flex items-center justify-center animate-pulse">
           <span className="text-white text-2xl font-black">⏳</span>
@@ -85,47 +122,220 @@ export default function ViewDailySales() {
       <div className="grid md:grid-cols-2 gap-6">
 
         {/* PMS */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition">
-          <h2 className="text-xl font-bold text-blue-800 mb-4">
-            PMS Sales
-          </h2>
+        {/* PMS */}
+<div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-3xl shadow-lg">
 
-          {sales.PMS.pumps.map((pump) => (
-            <div
-              key={pump.pumpNumber}
-              className="mb-4 p-4 bg-white rounded-xl shadow"
-            >
-              <p className="font-semibold text-gray-700">
-                Pump {pump.pumpNumber}
-              </p>
-              <p>Opening: {pump.openingMeter}</p>
-              <p>Closing: {pump.closingMeter}</p>
-              <p className="font-medium text-blue-700">
-                Litres Sold: {pump.litresSold}
-              </p>
-            </div>
-          ))}
+<h2 className="text-xl font-bold text-blue-800 mb-6">
+PMS Sales
+</h2>
 
-          <div className="border-t pt-4 space-y-1">
-            <p>Price/Litre: {formatCurrency(sales.PMS.pricePerLitre)}</p>
-            <p>Total Litres: {sales.PMS.totalLitres}</p>
-            <p>Total Amount: {formatCurrency(sales.PMS.totalAmount)}</p>
+{sales.PMS.priceSegments?.map((segment,index)=>{
 
-            {/* PMS Expense Details */}
-            {sales.PMS.expenses?.map((expense, i) => (
-              <div key={i} className="flex justify-between text-sm text-gray-600">
-                <span>{expense.description}</span>
-                <span>{formatCurrency(expense.amount)}</span>
-              </div>
-            ))}
+let segmentLitres=0;
 
-            <p>Total Expenses: {formatCurrency(sales.PMS.totalExpenses)}</p>
+let segmentAmount=0;
 
-            <p className="font-bold text-lg text-blue-900 mt-2">
-              Net Sales: {formatCurrency(sales.PMS.netSales)}
-            </p>
-          </div>
-        </div>
+sales.PMS.pumps.forEach(pump=>{
+
+pump.sales.forEach(sale=>{
+
+if(sale.priceIndex !== index) return;
+
+const litres =
+Math.max(
+(Number(sale.closingMeter)||0)
+-
+(Number(sale.openingMeter)||0)
+-
+(Number(sale.calibrationLitres)||0)
+,0);
+
+segmentLitres += litres;
+
+segmentAmount +=
+litres*(Number(segment.pricePerLitre)||0);
+
+});
+
+});
+
+return(
+
+<div
+key={index}
+className="mb-6 bg-white p-5 rounded-2xl shadow space-y-4"
+>
+
+<div className="flex justify-between border-b pb-2">
+
+<h3 className="font-bold text-blue-700">
+
+Price Segment {index+1}
+
+</h3>
+
+<div className="font-semibold">
+
+₦{Number(segment.pricePerLitre)
+.toLocaleString()}/L
+
+</div>
+
+</div>
+
+
+{/* PUMPS */}
+
+{sales.PMS.pumps.map((pump)=>(
+<div
+key={pump.pumpNumber}
+className="bg-gray-50 p-4 rounded-xl mb-3"
+>
+
+<p className="font-semibold text-gray-700 mb-2">
+
+Pump {pump.pumpNumber}
+
+</p>
+
+
+{pump.sales
+.filter(sale=>sale.priceIndex===index)
+.map((sale,i)=>{
+
+const litres=
+Math.max(
+
+(Number(sale.closingMeter)||0)
+
+-
+
+(Number(sale.openingMeter)||0)
+
+-
+
+(Number(sale.calibrationLitres)||0)
+
+,0);
+
+const amount=
+litres*(Number(segment.pricePerLitre)||0);
+
+return(
+
+<div
+key={i}
+className="grid md:grid-cols-3 gap-3 text-sm mb-3"
+>
+
+<div>
+
+Opening: {formatNumber(sale.openingMeter)}
+
+</div>
+
+<div>
+
+Closing: {formatNumber(sale.closingMeter)}
+
+</div>
+
+<div>
+
+Calibration: {formatNumber(sale.calibrationLitres)}
+
+</div>
+
+<div>
+
+Reason: {sale.calibrationReason || "-"}
+
+</div>
+
+<div className="font-medium text-blue-700">
+
+Litres: {formatNumber(litres)}
+
+</div>
+
+<div className="font-medium text-green-600">
+
+Amount:
+₦{amount.toLocaleString()}
+
+</div>
+
+</div>
+
+);
+
+})}
+
+</div>
+
+))}
+
+
+{/* SEGMENT TOTAL */}
+
+<div className="border-t pt-3 flex justify-between font-semibold">
+
+<div>
+
+Segment Litres:
+{formatNumber(segmentLitres)}
+
+</div>
+
+<div>
+
+Segment Amount:
+₦{segmentAmount.toLocaleString()}
+
+</div>
+
+</div>
+
+</div>
+
+);
+
+})}
+
+
+{/* PMS TOTALS */}
+
+<div className="bg-blue-200 p-5 rounded-xl space-y-2">
+
+<p>
+
+Total PMS Amount:
+
+{formatCurrency(sales.PMS.totalAmount)}
+
+</p>
+
+
+<p>
+
+Total PMS Expenses:
+
+{formatCurrency(sales.PMS.totalExpenses)}
+
+</p>
+
+
+<p className="font-bold text-lg">
+
+Net PMS Sales:
+
+{formatCurrency(sales.PMS.pNetSales)}
+
+</p>
+
+</div>
+
+</div>
 
         {/* AGO */}
         <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition">
@@ -134,10 +344,12 @@ export default function ViewDailySales() {
           </h2>
 
           <div className="space-y-1">
-            <p>Opening: {sales.AGO?.openingMeter}</p>
-            <p>Closing: {sales.AGO?.closingMeter}</p>
+            <p>Opening: {formatNumber(sales.AGO?.openingMeter)}</p>
+            <p>Closing: {formatNumber(sales.AGO?.closingMeter)}</p>
+            <p>Calibration: {formatNumber(sales.AGO?.calibrationLitres)}</p>
+            <p>Calibration Reason: {sales.AGO?.calibrationReason}</p>
             <p className="font-medium text-green-700">
-              Litres Sold: {sales.AGO?.litresSold}
+              Litres Sold: {formatNumber(sales.AGO?.litresSold)}
             </p>
             <p>Price/Litre: {formatCurrency(sales.AGO?.pricePerLitre)}</p>
             <p>Total Amount: {formatCurrency(sales.AGO?.totalAmount)}</p>
@@ -153,7 +365,7 @@ export default function ViewDailySales() {
              <p>Total Expenses: {formatCurrency(sales.AGO?.totalExpenses)}</p>
 
             <p className="font-bold text-lg text-green-900 mt-2">
-              Net Sales: {formatCurrency(sales.AGO?.netSales)}
+              Net Sales: {formatCurrency(sales.AGO?.ANetSales)}
             </p>
           </div>
         </div>
@@ -171,7 +383,7 @@ export default function ViewDailySales() {
             className="flex justify-between border-b py-2 hover:bg-gray-50 transition"
           >
             <span>
-              {item.itemName} ({item.quantitySold} × {formatCurrency(item.pricePerUnit)})
+              {item.itemName} ({formatNumber(item.quantitySold)} × {formatCurrency(item.pricePerUnit)})
             </span>
             <span className="font-semibold text-purple-700">
               {formatCurrency(item.totalAmount)}
@@ -207,10 +419,14 @@ export default function ViewDailySales() {
       {/* ================= SUMMARY ================= */}
       <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl">
         <h2 className="text-2xl font-bold mb-4">Financial Summary</h2>
-        <p>Total Sales: {formatCurrency(sales.totalSalesAmount)}</p>
+        <p>Total PMS Sales: {formatCurrency(sales.PMS.totalAmount)}</p>
+        <p>Total AGO Sales: {formatCurrency(sales.AGO.totalAmount)}</p>
+         <p>Total Products Sales: {formatCurrency(sales.totalProductsSales)}</p>
+        <p>Total Other Income: {formatCurrency(sales.totalOtherIncome)}</p>
+        <p>Total Gross Sales: {formatCurrency(sales.totalSalesAmount)}</p>
         <p>Total Expenses: {formatCurrency(sales.totalExpenses)}</p>
         <p className="text-2xl font-extrabold mt-4">
-          Net Sales: {formatCurrency(sales.netSales)}
+        Total  Net Sales: {formatCurrency(sales.netSales)}
         </p>
       </div>
 
@@ -243,6 +459,33 @@ export default function ViewDailySales() {
             LOCKED
           </span>
         )}
+      </div>
+
+      {/* ================= ACTIONS ================= */}
+      <div className="flex gap-4">
+        {!sales.isLocked && (
+          <button
+            onClick={() => navigate(`/dashboard/daily-sales/${id}/edit`)}
+            className="px-6 py-2 rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 transition"
+          >
+            Edit Daily Sales
+          </button>
+        )}
+      
+        <button
+        
+        onClick={() => handleDownloadPDF(id)}
+        className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+        disabled={loadingPDF}
+      >
+        {loadingPDF ? "Generating PDF..." : "Download PDF"}
+      </button>
+
+      {loadingPDF && (
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while your PDF is being generated.
+        </p>
+      )}
       </div>
     </div>
   );

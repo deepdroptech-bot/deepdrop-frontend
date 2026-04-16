@@ -7,8 +7,50 @@ export default function CreateStaff() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
   const [photo, setPhoto] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [message, setMessage] = useState("");
+const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false)
+
+  const [preview,setPreview] = useState(null);
+
+const handlePhoto = e => {
+
+const file = e.target.files[0];
+
+if(!file) return;
+
+setPhoto(file);
+
+setPreview(
+
+URL.createObjectURL(file)
+
+);
+
+};
+
+const handleChange = e => {
+
+const {name,value} = e.target;
+
+setForm({
+
+...form,
+
+[name]:value
+
+});
+
+setErrors({
+
+...errors,
+
+[name]:""
+
+});
+
+};
 
     useEffect(() => {
        // Simulate loading time for better UX
@@ -18,35 +60,99 @@ export default function CreateStaff() {
   }, []);
 
   const handleSubmit = async e => {
-  e.preventDefault();
 
-  if (!form.position) {
-    alert("Position is required");
-    return;
-  }
+e.preventDefault();
 
-  if (!form.baseSalary || isNaN(form.baseSalary)) {
-    alert("Base Salary must be a number");
-    return;
-  }
+if(loadingButton) return;
 
-  const data = new FormData();
+setLoadingButton(true);
 
-  Object.keys(form).forEach(key => {
-    if (form[key] !== undefined && form[key] !== "") {
-      data.append(key, form[key]);
-    }
-  });
+setErrors({});
 
-  if (photo) data.append("photo", photo);
+setMessage("");
 
-  await staffAPI.create(data);
+const data = new FormData();
 
-  setSuccess("Staff created successfully!");
-  setTimeout(() => {
-    setSuccess(null);
-    navigate("/dashboard/staff");
-  }, 2000);
+Object.keys(form).forEach(key=>{
+
+data.append(key,form[key]);
+
+});
+
+if(photo){
+
+data.append("photo",photo);
+
+}
+
+try{
+
+const res =
+await staffAPI.create(data);
+
+if(!res.data.success){
+
+if(res.data.errors){
+
+setErrors(res.data.errors);
+
+}else{
+
+setErrors({
+
+general:res.data.msg
+
+});
+
+}
+
+return;
+
+}
+
+setMessage(res.data.msg);
+
+setForm({
+
+staffId:"",
+firstName:"",
+lastName:"",
+phone:"",
+nin:"",
+position:"",
+baseSalary:""
+
+});
+
+setPhoto(null);
+
+setPreview(null);
+
+setTimeout(()=>{
+
+navigate("/dashboard/staff");
+
+},1000);
+
+}catch(err){
+
+setErrors({
+
+general:
+
+err.response?.data?.msg ||
+
+"Server error"
+
+});
+
+}
+finally{
+
+setLoadingButton(false);
+
+}
+
 };
 
 if (loading)
@@ -169,31 +275,81 @@ if (loading)
           <input
             type="file"
             className="hidden"
-            onChange={e => setPhoto(e.target.files[0])}
+            onChange={handlePhoto}
           />
+          {preview && (
+<img
+src={preview}
+className="w-24 h-24 rounded-xl object-cover"
+/>
+)}
         </label>
-      </div>
 
-      {success && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-          <span className="block sm:inline">{success}</span>
-        </div>
-      )}
+        {preview && (
+
+<img
+src={preview}
+className="w-24 h-24 rounded-xl object-cover"
+/>
+
+)}
+      </div>
+{errors.staffId && (
+
+<p className="text-red-500 text-sm">
+
+{errors.staffId}
+
+</p>
+
+)}
+{errors.general && (
+
+<div className="bg-red-100 text-red-700 p-3 rounded-xl">
+
+{errors.general}
+
+</div>
+
+)}
+{message && (
+
+<div className="bg-green-100 text-green-700 p-3 rounded-xl">
+
+{message}
+
+</div>
+
+)}
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="
-          w-full py-4 rounded-2xl
-          text-lg font-bold text-white
-          bg-gradient-to-tr from-red-500 to-blue-600
-          shadow-lg hover:shadow-xl
-          hover:scale-[1.02] active:scale-95
-          transition
-        "
-      >
-        Create Staff
-      </button>
+     <button
+
+disabled={loadingButton}
+
+className={`w-full p-3 rounded-xl text-white font-semibold
+
+${loadingButton
+
+? "bg-gray-400"
+
+: "bg-blue-600 hover:bg-blue-700"
+
+}
+
+`}
+      > 
+{loadingButton ?
+
+"Creating Staff..."
+
+:
+
+"Create Staff"
+
+}
+
+</button>
     </form>
   </div>
 );

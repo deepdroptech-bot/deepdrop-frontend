@@ -23,7 +23,7 @@ export default function GetStartedPage() {
       name: "Agbor RD Branch",
             image:
               agbor,
-      link: "/login/agbor-rd",
+      link: "/login",
       icon: <Building className="w-6 h-6 text-white" />,
       color: "bg-red-500",
       borderColor: "border-red-500",
@@ -32,7 +32,7 @@ export default function GetStartedPage() {
       name: "Ekiosa Branch",
       image:
         ekiosa,
-      link: "https://ekiosadeepdroop.netlify.app/login/ekiosa",
+      link: "https://ekiossadeepdrop.netlify.app/login",
       icon: <User className="w-6 h-6 text-white" />,
       color: "bg-blue-500",
       borderColor: "border-blue-500",

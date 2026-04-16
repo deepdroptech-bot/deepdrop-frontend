@@ -2,32 +2,66 @@ import ChartCard from "../../components/dashboard/ChartCard";
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 
+import Permissions from "../../components/Permission ";
+
 import {
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
-  Tooltip
+  Tooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis
 } from "recharts";
 
 export default function OperationalDashboard() {
   const { dashboardData } = useOutletContext();
 
   const inventory = dashboardData?.inventory || {};
-  const lowProducts = dashboardData?.lowProducts || [];
+  const bank = dashboardData?.bank || {};
 
+  /* =========================
+     FORMAT HELPERS
+  ========================= */
+  const formatMoney = (value) =>
+    (value || 0).toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+
+  const formatDecimal = (value) =>
+    (value || 0).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+  /* =========================
+     PIE DATA (rounded)
+  ========================= */
   const pieData = [
-    { name: "PMS", value: inventory.pmsQty || 0 },
-    { name: "AGO", value: inventory.agoQty || 0 }
-  ];
+  { name: "PMS", value: inventory.pmsQty || 0 },
+  { name: "AGO", value: inventory.agoQty || 0 }
+];
 
-  const COLORS = ["#1d4ed8", "#dc2626"];
+  const COLORS = ["#a33716", "#26a9dc"];
+
+  /* =========================
+     BAR DATA (inventory breakdown)
+  ========================= */
+
+  const productBarData = inventory.productChart || [];
+
+  const productSalesBarData = inventory.productSalesChart || [];
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-2 gap-6 max-w-full overflow-x-hidden">
 
-      {/* Inventory Pie */}
-      <ChartCard title="Inventory Distribution">
+      {/* =========================
+          INVENTORY PIE
+      ========================= */}
+      <ChartCard title="Fuel Inventory Distribution">
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -36,40 +70,196 @@ export default function OperationalDashboard() {
               outerRadius={100}
               label
             >
-              {pieData.map((entry, index) => (
+              {pieData.map((_, index) => (
                 <Cell key={index} fill={COLORS[index]} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip formatter={(value) => formatDecimal(value)} />
           </PieChart>
         </ResponsiveContainer>
       </ChartCard>
+      
 
-      {/* Low Products */}
-      <div className="bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
-        <h3 className="text-blue-700 font-semibold mb-4">
-          Low Stock Products
+      {/* =========================
+          Inventory
+      ========================= */}
+
+       <ChartCard title="Product Sales Levels">
+
+  <ResponsiveContainer width="100%" height={300}>
+    <BarChart data={productSalesBarData}>
+      <XAxis dataKey="name" />
+      <YAxis formatter={(value) => formatMoney(value)} />
+      <Tooltip formatter={(value) => formatMoney(value)} />
+      <Bar dataKey="value" fill="#3b82f6" />
+    </BarChart>
+  </ResponsiveContainer>
+
+</ChartCard>
+
+
+      <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+
+        <ChartCard title="Product Inventory Levels">
+
+  <ResponsiveContainer width="100%" height={300}>
+    <BarChart data={productBarData}>
+      <XAxis dataKey="name" />
+      <YAxis formatter={(value) => formatDecimal(value)} />
+      <Tooltip formatter={(value) => formatDecimal(value)} />
+      <Bar dataKey="value" fill="#bef63b" />
+    </BarChart>
+  </ResponsiveContainer>
+
+</ChartCard>
+
+        <h3 className="text-green-700 font-semibold mb-4">
+          📦 Low Stock Alert ({inventory.lowProductsCount || 0})
         </h3>
 
-        {lowProducts.length === 0 ? (
+        {inventory.lowProductsCount === 0 ? (
           <p className="text-gray-500">
-            All products sufficiently stocked.
+            All products are sufficiently stocked.
           </p>
         ) : (
-          <ul className="space-y-2">
-            {lowProducts.map((product, i) => (
-              <motion.li
-                key={i}
-                animate={{ x: [0, -5, 5, 0] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="text-red-600 font-medium"
-              >
-                {product.itemName} — {product.quantity} left
-              </motion.li>
-            ))}
-          </ul>
+          <motion.p
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="text-red-600 font-medium"
+          >
+            ⚠️ Some products are running low. Check inventory.
+          </motion.p>
         )}
       </div>
+
+      {/* =========================
+          BANK OVERVIEW + HISTORY
+      ========================= */}
+      <div className="bg-white p-6 rounded-2xl shadow-lg flex justify-between gap-6">
+
+        {/* BANK SUMMARY */}
+        <Permissions permission="AD_AC">
+        <div className="w-1/2">
+          <h3 className="font-semibold text-blue-700 mb-3">
+            🏦 Bank Overview
+          </h3>
+
+          <p>
+            Total Balance: ₦{formatMoney(bank.totalBalance)}
+          </p>
+
+          <div className="mt-2 text-sm text-gray-600">
+            PMS: ₦{formatMoney(bank.breakdown?.PMS)} <br />
+            AGO: ₦{formatMoney(bank.breakdown?.AGO)} <br />
+            Products: ₦{formatMoney(bank.breakdown?.products)} <br />
+            Other Income: ₦{formatMoney(bank.breakdown?.otherIncome)}
+          </div>
+        </div>
+        </Permissions>
+
+        {/* BANK HISTORY */}
+        <div className="w-1/2 border-l pl-4">
+          <h3 className="font-semibold text-gray-700 mb-3">
+            📜 Recent Activities
+          </h3>
+
+        <Permissions permission="AD_AC">
+          <h4 className="border-b-t font-semibold mb-3">💰 Bank Activity</h4>
+
+          {bank.recentTransactions?.length > 0 ? (
+            <div className="space-y-3 text-sm pb-4 border-b">
+              {bank.recentTransactions.map((tx, i) => (
+                <div key={i} className="flex justify-between text-gray-600">
+                  <span>
+                    {new Date(tx.addedAt).toLocaleDateString()}
+                  </span>
+                  <span className={`font-medium ${
+tx.type === "PMS"
+? "text-blue-400"
+: tx.type === "AGO"
+? "text-green-400"
+: tx.type === "products"
+? "text-purple-400"
+: "text-pink-400"
+}`} >
+                    {tx.type}
+                  </span>
+                  <span className="font-medium">
+                    ₦{formatMoney(tx.amount || 0)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">
+              No recent bank activities
+            </p>
+          )}
+          </Permissions>
+
+             <h4 className=" border-b-t font-semibold mb-3 mt-6">⛽ Fuel Activity</h4>
+
+{inventory?.fuelHistory?.length > 0 ? (
+  <div className="space-y-3 text-sm pb-4 border-b">
+    {inventory.fuelHistory.map((item, i) => (
+      <div key={i} className="flex justify-between text-gray-600">
+
+        <span>
+          {new Date(item.addedAt).toLocaleDateString()}
+        </span>
+
+        <span
+          className={`font-medium ${
+            item.type === "PMS"
+              ? "text-blue-400"
+              : "text-green-400"
+          }`}
+        >
+          {item.type}
+        </span>
+
+        <span className="font-medium text-gray-800">
+          {item.quantity}L • Well {item.wellNumber || "-"}
+        </span>
+
+      </div>
+    ))}
+  </div>
+) : (
+  <p className="text-gray-400 text-sm">No recent fuel activities</p>
+)}
+
+      <h4 className=" border-b-t font-semibold mb-3 mt-6">
+  📦 Product Activity
+</h4>
+
+{inventory?.productHistory?.length > 0 ? (
+  <div className="space-y-3 text-sm pb-4 border-b">
+    {inventory.productHistory.map((item, i) => (
+      <div key={i} className="flex justify-between text-gray-600">
+
+        <span>
+          {new Date(item.createdAt).toLocaleDateString()}
+        </span>
+
+        <span className="font-medium text-purple-500">
+          {item.itemName}
+        </span>
+
+        <span className="font-medium text-gray-800">
+          {item.quantity} pcs
+        </span>
+
+      </div>
+    ))}
+  </div>
+) : (
+  <p className="text-gray-400 text-sm">No recent product activities</p>
+)}
+        </div>
+
+      </div>
+
     </div>
   );
 }

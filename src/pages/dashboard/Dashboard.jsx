@@ -9,8 +9,8 @@ export default function Dashboard() {
 
   const loadDashboard = async () => {
     try {
-      const data = await dashboardAPI.getOverview();
-      setDashboardData(data);
+      const res = await dashboardAPI.getOverview();
+setDashboardData(res.data);
     } catch (error) {
       console.error("Dashboard load failed:", error);
     } finally {
@@ -27,9 +27,9 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-blue-800">
-         Agbor-RD Dashboard Services
+      <div className="mb-6 pb-4 border-b-2 border-white">
+        <h1 className="text-2xl md:text-3xl font-bold text-blue-800 ">
+         Agbor-rd Dashboard Services
         </h1>
         <p className="text-gray-500 text-sm">
           Create, manage, and monitor all your dashboard services in one place.

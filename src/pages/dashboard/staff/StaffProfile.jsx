@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { staffAPI } from "../../../services/staffService";
 import Permissions from "../../../components/Permission ";
+import { pdfAPI } from "../../../services/pdfService";
 
 export default function StaffProfile() {
   const { id } = useParams();
@@ -9,6 +10,11 @@ export default function StaffProfile() {
 
   const [staff, setStaff] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingPDF, setLoadingPDF] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [payModal, setPayModal] = useState(false);
+
+const [preview, setPreview] = useState(null);
 
   const [bonus, setBonus] = useState({ amount: "", reason: "" });
   const [deduction, setDeduction] = useState({ amount: "", reason: "" });
@@ -18,6 +24,32 @@ export default function StaffProfile() {
       .then(res => setStaff(res.data))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handlegeneratePDF = async () => {
+    try {
+      setLoadingPDF(true); // Start loading
+
+      const res = await pdfAPI.generateStaffPDF(id);
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Staff_Profile_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error("PDF download failed:", err);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setLoadingPDF(false); // Stop loading
+    }
+  };
+
 
   if (loading)
   return (
@@ -70,6 +102,7 @@ export default function StaffProfile() {
     await staffAPI.paySalary(id);
     const updated = await staffAPI.getById(id);
     setStaff(updated.data);
+    setPayModal(false);
   };
 
   const toggleStatus = async () => {
@@ -82,8 +115,8 @@ export default function StaffProfile() {
   };
 
   const deleteStaff = async () => {
-    if (!confirm("Are you sure you want to delete this staff?")) return;
     await staffAPI.delete(id);
+    setDeleteModal(false);
     navigate("/dashboard/staff");
   };
 
@@ -94,10 +127,11 @@ export default function StaffProfile() {
     <div className="bg-white/70 backdrop-blur-2xl border border-white/40 shadow-2xl rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
 
       <img
-        src={staff.photo?.url || "/avatar.png"}
-        className="w-28 h-28 rounded-3xl object-cover border-4 border-white shadow-lg"
-        alt="staff"
-      />
+  src={staff.photo?.url || "/avatar.png"}
+  className="w-28 h-28 rounded-3xl object-cover border-4 border-white shadow-lg cursor-pointer"
+  alt="staff"
+  onClick={() => setPreview(staff.photo?.url || "/avatar.png")}
+/>
 
       <div className="flex-1 text-center md:text-left">
         <h1 className="text-3xl font-extrabold text-gray-900">
@@ -257,7 +291,7 @@ export default function StaffProfile() {
     <Permissions permission="AD_AC">
       <button
         className="px-6 py-3 rounded-2xl font-semibold bg-blue-500 text-white shadow hover:shadow-lg transition"
-        onClick={handlePaySalary}
+        onClick={() => setPayModal(true)}
       >
         Pay Salary
       </button>
@@ -284,12 +318,116 @@ export default function StaffProfile() {
       <Permissions permission="AD_AC">
       <button
         className="px-6 py-3 rounded-2xl font-semibold text-white bg-red-600 hover:bg-red-700 shadow transition"
-        onClick={deleteStaff}
+        onClick={() => setDeleteModal(true)}
       >
         Delete Staff
       </button>
+
+      <button
+        
+        onClick={() => handlegeneratePDF()}
+        className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+        disabled={loadingPDF}
+      >
+        {loadingPDF ? "Generating PDF..." : "Download Staff PDF"}
+      </button>
+
+      {loadingPDF && (
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while your PDF is being generated.
+        </p>
+      )}
       </Permissions>
+
+      <td>
+
+<button
+onClick={()=>
+navigate(
+`/dashboard/staff/${staff._id}/history`
+)
+}
+
+className="px-6 py-3 rounded-2xl font-semibold text-white bg-red-600 hover:bg-purple-700 shadow transition"
+>
+
+View History
+
+</button>
+
+</td>
     </div>
 
+  {deleteModal && (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-3xl p-8 shadow-lg text-center">
+        <h3 className="text-xl font-bold text-gray-800 mb-4">
+          Confirm Deletion
+        </h3>
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to delete this staff member? This action cannot be undone.
+        </p>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => setDeleteModal(false)
+
+            }
+            className="px-6 py-3 rounded-2xl font-semibold text-white bg-gray-500 hover:bg-gray-600 shadow transition"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={deleteStaff}
+            className="px-6 py-3 rounded-2xl font-semibold text-white bg-red-600 hover:bg-red-700 shadow transition"
+          >
+            Yes, Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {payModal && (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-3xl p-8 shadow-lg text-center">
+        <h3 className="text-xl font-bold text-gray-800 mb-4">
+          Confirm Salary Payment
+        </h3>
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to pay the salary for this staff member?
+        </p>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => setPayModal(false)}
+            className="px-6 py-3 rounded-2xl font-semibold text-white bg-gray-500 hover:bg-gray-600 shadow transition"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handlePaySalary}
+            className="px-6 py-3 rounded-2xl font-semibold text-white bg-green-600 hover:bg-green-700 shadow transition"
+          >
+            Yes, Pay Salary
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {preview && (
+  <div
+    className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+    onClick={() => setPreview(null)}
+  >
+    <img
+      src={preview}
+      alt="preview"
+      className="max-w-[90%] max-h-[90%] rounded-xl shadow-2xl"
+      onClick={(e) => e.stopPropagation()} // prevents closing when clicking image
+    />
   </div>
-);}
+)}
+
+  </div>
+);
+}

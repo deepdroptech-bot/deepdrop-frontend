@@ -1,6 +1,7 @@
 import api from "./api";
 
 export const inventoryAPI = {
+  
   getInventory: () => api.get("/inventory"),
 
   getFuelInventory: () => api.get("/inventory/fuel"),
@@ -11,6 +12,13 @@ export const inventoryAPI = {
     api.post("/inventory/fuel-stock", data),
 
   addProductQuantity: (data) =>
-    api.post("/inventory/product-quantity", data)
+    api.post("/inventory/product-quantity", data),
+
+  getFuelHistory:(params)=>
+api.get("/inventory/fuel-history",{params}),
+
+getProductHistory:(params)=>
+api.get("/inventory/product-history",{params})
+
 };
 

@@ -1,16 +1,44 @@
 import { useEffect, useState } from "react";
 import { staffAPI } from "../../../services/staffService";
 import { Link } from "react-router-dom";
+import { pdfAPI } from "../../../services/pdfService";
+import Permissions from "../../../components/Permission ";
 
 export default function StaffList() {
   const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingPDF, setLoadingPDF] = useState(false);
 
   useEffect(() => {
     staffAPI.getAll()
       .then(res => setStaff(res.data))
       .finally(() => setLoading(false));
   }, []);
+
+  const handlegeneratePDF = async () => {
+    try {
+      setLoadingPDF(true); // Start loading
+
+      const res = await pdfAPI.generateStaffSalaryPDF();
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Staff_Salary_List.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error("PDF download failed:", err);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setLoadingPDF(false); // Stop loading
+    }
+  };
 
     if (loading)
   return (
@@ -37,6 +65,23 @@ export default function StaffList() {
           + Add Staff
         </Link>
       </div>
+
+       <Permissions permission="AD_AC">
+        <button
+        
+        onClick={() => handlegeneratePDF()}
+        className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+        disabled={loadingPDF}
+      >
+        {loadingPDF ? "Generating PDF..." : "Download Staff Salary List PDF"}
+      </button>
+
+      {loadingPDF && (
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while your PDF is being generated.
+        </p>
+      )}
+        </Permissions>
 
       <div className="grid gap-4">
         {staff.map(s => (

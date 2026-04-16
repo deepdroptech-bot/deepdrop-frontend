@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { profitAuditAPI } from "../../../services/profit&AuditService";
+import { pdfAPI } from "../../../services/pdfService";
 
 export default function ProfitAuditManagement() {
 
@@ -16,9 +17,17 @@ export default function ProfitAuditManagement() {
   const [auditData, setAuditData] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [loadingPDF, setLoadingPDF] = useState(false); 
+
+  const [calibrationFrom,setCalibrationFrom] = useState("");
+const [calibrationTo,setCalibrationTo] = useState("");
+const [calibrationData,setCalibrationData] = useState([]);
 
   const formatCurrency = (val) =>
-    `₦${Number(val || 0).toLocaleString()}`;
+    `₦${Number(val || 0).toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })}`;
 
   useEffect(() => {
     // Simulate loading time for better UX
@@ -51,6 +60,48 @@ export default function ProfitAuditManagement() {
     }
   };
 
+const handleGenerateSummaryPDF = async () => {
+
+try{
+  setLoadingPDF(true);
+
+const res = await pdfAPI.generateProfitSummaryPDF(from,to);
+
+const blob = new Blob(
+[res.data],
+{type:"application/pdf"}
+);
+
+const url = window.URL.createObjectURL(blob);
+
+const link = document.createElement("a");
+
+link.href = url;
+
+link.download = `Profit_Summary_${from}_to_${to}.pdf`;
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+window.URL.revokeObjectURL(url);
+
+}
+catch(err){
+  setLoadingPDF(false);
+
+console.error(err);
+
+alert("Failed to generate PDF");
+
+} finally{
+  setLoadingPDF(false);
+};
+
+};
+
   /* ================= AUDIT TRAIL ================= */
 
   const fetchAuditTrail = async () => {
@@ -61,6 +112,59 @@ export default function ProfitAuditManagement() {
       alert("Sales record not found");
     }
   };
+
+  /* ================= CALIBRATION AUDIT ================= */
+
+  const fetchCalibrationAudit = async ()=>{
+
+try{
+
+const res = await profitAuditAPI.getPumpCalibrationAudit(
+calibrationFrom,
+calibrationTo
+);
+
+setCalibrationData(res.data);
+
+}catch{
+
+alert("Failed to fetch calibration audit");
+
+}
+
+};
+
+const handleGenerateCalibrationPDF = async ()=>{
+
+try{
+  setLoadingPDF(true);
+const res = await pdfAPI.generateCalibrationPDF(calibrationFrom,calibrationTo);
+
+const blob = new Blob(
+[res.data],
+{type:"application/pdf"}
+);
+const url = window.URL.createObjectURL(blob);
+
+const link = document.createElement
+("a");
+
+link.href = url;
+link.download = `Pump_Calibration_${calibrationFrom}_to_${calibrationTo}.pdf`;
+
+document.body.appendChild(link);
+link.click();
+link.remove();
+window.URL.revokeObjectURL(url);
+}
+catch(err){
+  setLoadingPDF(false);
+console.error(err);
+alert("Failed to generate PDF");
+} finally{
+  setLoadingPDF(false);
+};
+};
 
   if (loading)
   return (
@@ -80,7 +184,10 @@ export default function ProfitAuditManagement() {
   );
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+
+      <div className="space-y-8 py-6">
+
 
       {/* ================= HEADER ================= */}
       <div className="bg-gradient-to-r from-indigo-700 to-purple-700 text-white p-8 rounded-3xl shadow-xl">
@@ -93,8 +200,8 @@ export default function ProfitAuditManagement() {
       </div>
 
       {/* ================= TABS ================= */}
-      <div className="flex gap-4">
-        {["daily", "summary", "audit"].map(tab => (
+      <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+        {["daily","summary", "calibration","audit"].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -106,6 +213,7 @@ export default function ProfitAuditManagement() {
           >
             {tab === "daily" && "Daily Report"}
             {tab === "summary" && "Profit Summary"}
+            {tab === "calibration" && "Pump Calibration"}
             {tab === "audit" && "Audit Trail"}
           </button>
         ))}
@@ -117,7 +225,7 @@ export default function ProfitAuditManagement() {
       {activeTab === "daily" && (
         <div className="bg-white p-6 rounded-3xl shadow-xl space-y-6">
 
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <input
               type="date"
               className="border p-3 rounded-xl"
@@ -126,7 +234,7 @@ export default function ProfitAuditManagement() {
             />
             <button
               onClick={fetchDailyReport}
-              className="bg-indigo-600 text-white px-6 rounded-xl"
+              className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
             >
               Generate
             </button>
@@ -175,16 +283,16 @@ export default function ProfitAuditManagement() {
       {activeTab === "summary" && (
         <div className="bg-white p-6 rounded-3xl shadow-xl space-y-6">
 
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <input type="date" className="border p-3 rounded-xl" value={from} onChange={e => setFrom(e.target.value)} />
             <input type="date" className="border p-3 rounded-xl" value={to} onChange={e => setTo(e.target.value)} />
-            <button onClick={fetchSummary} className="bg-purple-600 text-white px-6 rounded-xl">
+            <button onClick={fetchSummary} className="bg-purple-600 text-white px-6 py-3 rounded-xl">
               Generate
             </button>
           </div>
 
           {summary && (
-  <div className="grid md:grid-cols-3 gap-8 mt-6">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
     {/* ================= PMS CARD ================= */}
     <div className="relative overflow-hidden bg-white border border-gray-100 rounded-3xl p-7 shadow-lg hover:shadow-xl transition-all">
@@ -207,8 +315,27 @@ export default function ProfitAuditManagement() {
       <div className="space-y-2 text-sm text-gray-600">
         <p>
           <span className="font-medium text-gray-700">Litres Sold:</span>{" "}
-          {summary.PMS.litres.toLocaleString()} L
+          {summary.PMS.totalLitres.toLocaleString()} L
         </p>
+
+      <p>
+<span className="font-medium text-gray-700">
+Pump 1 & 2:
+</span>
+
+{summary.PMS.pump12Litres.toLocaleString()} L
+</p>
+
+<p>
+
+<span className="font-medium text-gray-700">
+Pump 3 & 4:
+</span>
+
+{summary.PMS.pump34Litres.toLocaleString()} L
+
+</p>
+
         <p>
           <span className="font-medium text-gray-700">Revenue:</span>{" "}
           {formatCurrency(summary.PMS.revenue)}
@@ -280,6 +407,34 @@ export default function ProfitAuditManagement() {
       </div>
     </div>
 
+    <div className="bg-orange-50 p-6 rounded-2xl">
+
+<h3 className="font-bold mb-2">
+Products Revenue
+</h3>
+
+<p className="text-2xl font-bold text-orange-600">
+
+{formatCurrency(summary.products.revenue)}
+
+</p>
+
+</div>
+
+<div className="bg-pink-50 p-6 rounded-2xl">
+
+<h3 className="font-bold mb-2">
+Other Income
+</h3>
+
+<p className="text-2xl font-bold text-pink-600">
+
+{formatCurrency(summary.otherIncome)}
+
+</p>
+
+</div>
+
     {/* ================= GRAND TOTAL ================= */}
     <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-3xl p-8 shadow-xl">
 
@@ -310,8 +465,174 @@ export default function ProfitAuditManagement() {
 
   </div>
 )}
+
+  <div className="flex justify-end mt-8">
+
+    <button
+      onClick={handleGenerateSummaryPDF}
+      className="bg-green-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-green-700 transition"
+      disabled={loadingPDF}
+      >
+        {loadingPDF ? "Generating PDF..." : "Log Info & Generate PDF"}
+    </button>
+
+    {loadingPDF && (
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while your PDF is being generated.
+        </p>
+      )}
+
+  </div>
         </div>
       )}
+
+    {/* ============================================================
+         PUMP CALIBRATION AUDIT
+      ============================================================ */}
+      {activeTab === "calibration" && (
+
+<div className="bg-white p-6 rounded-3xl shadow-xl space-y-6">
+
+<div className="flex flex-col md:flex-row gap-4">
+
+<input
+type="date"
+className="border p-3 rounded-xl"
+value={calibrationFrom}
+onChange={e=>setCalibrationFrom(e.target.value)}
+/>
+
+<input
+type="date"
+className="border p-3 rounded-xl"
+value={calibrationTo}
+onChange={e=>setCalibrationTo(e.target.value)}
+/>
+
+<button
+
+onClick={fetchCalibrationAudit}
+
+className="bg-red-600 text-white px-6 py-3 rounded-xl"
+
+>
+
+Generate
+
+</button>
+
+</div>
+
+<div className="w-full overflow-x-auto">
+  <table className="w-full min-w-[600px]">
+
+<thead className="bg-gray-100">
+
+<tr>
+
+<th className="p-3">Date</th>
+
+<th className="p-3">Pump</th>
+
+<th className="p-3">Litres</th>
+
+<th className="p-3">Reason</th>
+
+<th className="p-3">Staff</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{calibrationData?.length ?(
+
+calibrationData.map((item,i)=>(
+
+<tr
+key={i}
+className="border-b"
+>
+
+<td className="p-3">
+
+{new Date(item.salesDate)
+.toLocaleDateString()}
+
+</td>
+
+<td className="p-3">
+
+Pump {item.pumpNumber}
+
+</td>
+
+<td className="p-3 text-red-600 font-semibold">
+
+{item.calibrationLitres} L
+
+</td>
+
+<td className="p-3">
+
+{item.calibrationReason}
+
+</td>
+
+<td className="p-3">
+
+{item.staffName || "-"}
+
+</td>
+
+</tr>
+
+))
+
+):( 
+
+<tr>
+
+<td
+colSpan="5"
+className="text-center p-6"
+>
+
+No calibration records
+
+</td>
+
+</tr>
+
+)}
+
+</tbody>
+
+</table>
+</div>
+
+<div className="flex justify-end mt-8">
+
+    <button
+      onClick={handleGenerateCalibrationPDF}
+      className="bg-green-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-green-700 transition"
+      disabled={loadingPDF}
+      >
+        {loadingPDF ? "Generating PDF..." : "Log Info & Generate PDF"}
+    </button>
+
+    {loadingPDF && (
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while your PDF is being generated.
+        </p>
+      )}
+
+  </div>
+
+</div>
+
+)}
 
       {/* ============================================================
          AUDIT TRAIL TAB
@@ -319,7 +640,7 @@ export default function ProfitAuditManagement() {
       {activeTab === "audit" && (
         <div className="bg-white p-6 rounded-3xl shadow-xl space-y-6">
 
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <input
               type="date"
               placeholder="Enter Sales Date (YYYY-MM-DD)"
@@ -329,7 +650,7 @@ export default function ProfitAuditManagement() {
             />
             <button
               onClick={fetchAuditTrail}
-              className="bg-gray-800 text-white px-6 rounded-xl"
+              className="bg-gray-800 text-white px-6 py-3 rounded-xl"
             >
               Check
             </button>
@@ -352,6 +673,7 @@ export default function ProfitAuditManagement() {
         </div>
       )}
 
+    </div>
     </div>
   );
 }
