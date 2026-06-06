@@ -7,6 +7,10 @@ export default function ViewExpense() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    fetchCurrent();
+}, []);
+
     const fetchCurrent = async () => {
     try {
         setLoading(true);
