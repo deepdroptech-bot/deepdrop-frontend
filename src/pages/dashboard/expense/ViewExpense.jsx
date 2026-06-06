@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react";
 import { expenseAPI } from "../../../services/expenseService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ViewExpense() {
   const [expenseDoc, setExpenseDoc] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const { id } = useParams();
 
   useEffect(() => {
     fetchCurrent();
@@ -15,7 +17,7 @@ export default function ViewExpense() {
     try {
         setLoading(true);
 
-        const res = await expenseAPI.getDocumentExpenses();
+        const res = await expenseAPI.getDocumentExpenses(id);
 
         if (res?.data) {
             setExpenseDoc(res.data);
