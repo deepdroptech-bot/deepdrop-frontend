@@ -8,16 +8,21 @@ export default function ViewExpense() {
   const navigate = useNavigate();
 
     const fetchCurrent = async () => {
-        const res = await expenseAPI.getDocumentExpenses();
-        if (!res.data.msg) setExpenseDoc(res.data);
-    };
+    try {
+        setLoading(true);
 
-    useEffect(() => {
-        fetchCurrent();
-        // Simulate loading time for better UX
-        const timer = setTimeout(() => setLoading(false), 1000);
-        return () => clearTimeout(timer);
-    }, []);
+        const res = await expenseAPI.getDocumentExpenses();
+
+        if (res?.data) {
+            setExpenseDoc(res.data);
+        }
+
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setLoading(false);
+    }
+};
 
     const formatCurrency = (val) =>
         `₦${Number(val || 0).toLocaleString()}`;
@@ -39,14 +44,22 @@ export default function ViewExpense() {
             </div>
         );
 
+        if (!expenseDoc) {
+    return (
+        <div className="min-h-[60vh] flex items-center justify-center">
+            <p className="text-gray-500">No expense document found</p>
+        </div>
+    );
+}
+
     return (
         <div className="bg-white p-6 rounded-3xl shadow-lg">
             <h2 className="text-2xl font-bold mb-4">
-                {expenseDoc.title}
+                {expenseDoc?.title}
             </h2>
             <p className="text-gray-500 mb-6">
-                Created At: {new Date(expenseDoc.createdAt).toLocaleString()}
-            </p>
+               Created At: {expenseDoc?.createdAt && new Date(expenseDoc.createdAt).toLocaleString()}
+               </p>
             <table className="w-full text-left border-collapse">
                 <thead>
                 <tr>
@@ -56,7 +69,7 @@ export default function ViewExpense() {
                 </tr>
                 </thead>
                 <tbody>
-                {expenseDoc.expenses.map((exp) => (
+                {expenseDoc?.expenses?.map((exp) => (
                     <tr key={exp._id}>
                         <td className="border-b p-3">{exp.description}</td>
                         <td className="border-b p-3">{formatCurrency(exp.amount)}</td>
